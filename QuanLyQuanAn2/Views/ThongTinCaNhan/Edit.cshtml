@@ -1,0 +1,103 @@
+﻿@model Models.Framework.KHACHHANG
+
+@{
+    ViewBag.Title = "Index";
+    if (ViewBag.IsKhachHangDaDangNhap)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutChuaLogin.cshtml";
+    }
+
+}
+<div style="width:90%; text-align:center;margin-left:5%">
+    <div class="hero-wrap hero-bread" style="background-image: url(/Assets/khachhang/image/anh-nen-info.png); width:100%;height:40px;text-align:center;display: inline-block"></div>
+</div>
+<div style="width:90%;margin-left:5%; color:black">
+    <h2 style="margin-left:3%;color:green;text-align:center">Sửa thông tin cá nhân</h2>
+    <hr />
+    <table style="width:100%">
+        <tbody>
+            <tr>
+                <td>
+                    <ul style="list-style-type:none;">
+                        <li style="margin-top:10px">ID: </li>
+                        <li>@Model.MAKHACHHANG</li>
+                        <li style="margin-top:10px">Họ tên: </li>
+                        <li><input value="@Model.ACCOUNT.HOTEN" id="ho-ten-edit"/></li>
+                        <li style="margin-top:10px">Giới tính:</li>
+                        <li>
+                            <select id="gioi-tinh-edit" class="chon-gioi-tinh">
+                                <option value="1" @(Model.ACCOUNT.GIOITINH == "Nam" ? "selected" : "")>Nam</option>
+                                <option value="0" @(Model.ACCOUNT.GIOITINH != "Nam" ? "selected" : "")>Nữ</option>
+                            </select>
+                        </li>
+                        <li style="margin-top:10px">Ngày sinh: </li>
+                        <li><input id="ngay-sinh-edit" type="date" value="@Model.ACCOUNT.NGAYSINH.Value.ToString("yyyy-MM-dd")" /></li>
+                        
+                    </ul>
+                </td>
+                <td>
+                    <ul style="list-style-type:none;">
+                        <li style="margin-top:10px">Tài khoản: </li>
+                        <li>@Model.ACCOUNT.TAIKHOAN</li>
+                        <li style="margin-top:10px">SĐT: </li>
+                        <li><input id="sdt-edit" type="tel" value="@Model.ACCOUNT.SDT" /></li>
+                        
+                        <li style="margin-top:10px">Địa chỉ: </li>
+                        <li><input id="dia-chi-edit" value="@Model.ACCOUNT.DIACHI" style="width:70%"/></li>
+                        <li style="margin-top:10px">Địa chỉ nhận hàng: </li>
+                        <li><input id="dia-chi-nhan-hang-edit" value="@Model.DIACHINHANHANG" style="width:70%"/></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr></tr>
+        </tbody>
+    </table>
+    <div style="margin-left:3%">
+        <button style="background-color:lightgreen;border-color:darkseagreen;" onclick="SaveInfo()">Lưu</button>
+    </div>
+
+    <hr />
+    <hr />
+</div>
+<script>
+    function SaveInfo() {
+        if ('@ViewBag.IsKhachHangDaDangNhap' != 'True') {
+            location.href = '@Url.Action("Index","DangNhap")';
+            return;
+        }
+        const url = '../api/ThongTinCaNhanApi?';
+        // The data we are going to send in our request
+        let params = {
+            hoTen: $('#ho-ten-edit').val(), 
+            gioiTinh: $('#gioi-tinh-edit').children("option:selected").val(), 
+            ngaySinh: $('#ngay-sinh-edit').val(), 
+            sdt: $('#sdt-edit').val(), 
+            diaChi: $('#dia-chi-edit').val(), 
+            diaChiNhanHang: $('#dia-chi-nhan-hang-edit').val(),
+        }
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            location.href = "@Url.Action("Index", "ThongTinCaNhan")";
+        });
+    }
+</script>
+

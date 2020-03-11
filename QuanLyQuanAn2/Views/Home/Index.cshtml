@@ -1,0 +1,220 @@
+﻿@model List<Models.Framework.MENUMONAN>
+@{
+    ViewBag.Title = "Index";
+    if (ViewBag.IsKhachHangDaDangNhap)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutChuaLogin.cshtml";
+    }
+}
+
+<!--Anh Bia-->
+<section id="home-section" class="hero">
+    <div class="home-slider owl-carousel">
+        <div class="slider-item" style="background-image: url(/Assets/khachhang/image/thit-kho-trung-cut.jpg);">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+
+                    <div class="col-md-12 ftco-animate text-center">
+                        <h1 class="mb-2">Món ăn đa dạng</h1>
+                        <h2 class="subheading mb-4">Với hơn 15 món ăn khác nhau</h2>
+                        <p><a href="@Url.Action("Index","MenuSanPham")" class="btn btn-primary">Mua ngay</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-item" style="background-image: url(/Assets/khachhang/image/canh-kho-qua.jpg);">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+
+                    <div class="col-sm-12 ftco-animate text-center">
+                        <h1 class="mb-2">Vừa ngon-bổ-rẻ</h1>
+                        <h2 class="subheading mb-4">Hãy đến ngay với quán cơm Bầu Bí</h2>
+                        <p><a href="@Url.Action("Index","MenuSanPham")" class="btn btn-primary">Mua ngay</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Gioi thieu dau tien-->
+<section class="ftco-section">
+    <div class="container">
+        <div class="row no-gutters ftco-services">
+            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-shipped"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Miễn phí ship</h3>
+                        <span>Đối với tất cả các đơn hàng trong phạm vi hợp lệ</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-award"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Chất lượng đảm bảo</h3>
+                        <span>Đạt chứng nhận vệ sinh an toàn thực phẩm</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-diet"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Mở cửa mỗi ngày</h3>
+                        <span>Quán mở của các ngày trong tuần từ 9h-20h30</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services mb-md-0 mb-4">
+                    <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
+                        <span class="flaticon-customer-service"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Giao hàng nhanh chóng</h3>
+                        <span>Đơn hàng của bạn sẽ được giao trong vòng 10p sau khi xác nhận</span>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+</section>
+
+
+<!--Menu-->
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-3 pb-3">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Menu</span>
+                <h2 class="mb-4">Món ăn - nước giải khát</h2>
+                <p>Chỉ giao hàng trong khu vực Làng đại học!</p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <!--Mot mat hang-->
+            @foreach(var item in Model){
+            <div class="col-md-6 col-lg-3 ftco-animate">
+                <div class="product">
+                    <a href="#" class="img-prod" style="text-align:center">
+                        <img class="img-fluid" src="@item.MONAN.HINHANH" alt="Colorlib Template" style="height:190px; align-self:center">
+
+                        <span class="status">@(item.TRANGTHAI.Value==true?"":"Tạm hết")</span>
+                        <div class="overlay"></div>
+                    </a>
+                    <div class="text py-3 pb-4 px-3 text-center">
+                        <h3><a href="#">@item.MONAN.MATHANG.TENMATHANG</a></h3>
+                        <div class="d-flex">
+                            <div class="pricing">
+                                <p class="price"><span class="price-sale">@item.MONAN.GIABAN VNĐ</span></p>
+                            </div>
+                        </div>
+                        <div class="bottom-area d-flex px-3">
+                            <div class="m-auto d-flex">
+                                <a onclick="AddToCart('@item.MAMONAN','1')" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                    <span><i class="ion-ios-cart"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+            <!--Nuoc giai khat-->
+            @foreach (var item in Models.MenuNuocGiaiKhatModel.ListCon())
+            {
+                <div class="col-md-6 col-lg-3 ftco-animate">
+                    <div class="product">
+                        <a href="#" class="img-prod" style="text-align:center">
+                            <img class="img-fluid" src="@item.NUOCGIAIKHAT.HINHANH" alt="Colorlib Template" style="height:190px; align-self:center">
+
+                            <span class="status">@(item.NUOCGIAIKHAT.SOLUONGCON.Value >0 ? "" : "Tạm hết")</span>
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h3><a href="#">@item.NUOCGIAIKHAT.MATHANG.TENMATHANG</a></h3>
+                            <div class="d-flex">
+                                <div class="pricing">
+                                    <p class="price"><span class="price-sale">@item.NUOCGIAIKHAT.GIABAN VNĐ</span></p>
+                                </div>
+                            </div>
+                            <div class="bottom-area d-flex px-3">
+                                <div class="m-auto d-flex">
+                                    <a onclick="AddToCart('@item.MANUOCGIAIKHAT','1')" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <span><i class="ion-ios-cart"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            
+        </div>
+    </div>
+    <div style="width:100%; text-align:center">
+        <a href="@Url.Action("Index","MenuSanPham")" style="width:100%; text-align:center; font-size:larger;">Xem thêm</a>
+    </div>
+</section>
+
+
+<script>
+    function AddToCart(maMH, SoLuong) {
+        if('@ViewBag.IsKhachHangDaDangNhap'!='True'){
+            location.href = '@Url.Action("Index","DangNhap")';
+            return;
+        }
+        const url = '../api/GioHangApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            maMatHang: maMH,
+            soLuong: SoLuong,
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+        });
+    }
+
+
+</script>
+

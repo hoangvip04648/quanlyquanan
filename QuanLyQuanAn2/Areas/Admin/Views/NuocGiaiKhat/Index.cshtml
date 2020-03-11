@@ -1,0 +1,370 @@
+﻿@model IEnumerable<Models.Framework.NUOCGIAIKHAT>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-form" id="main-form">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Quản lý Nước giải khát</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div id="dataTable_filter" class="dataTables_filter">
+                                <label>Tìm kiếm:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable" id="tim-kiem-edit" value="@ViewBag.Query"></label>
+                                <button onclick="TimKiem()">Xem</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;color:black;">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: auto;">Mã nước giải khát</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: auto;">Tên nước giải khát</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: auto;">Đơn vị</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: auto;">Giá bán</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: auto;">Số lượng còn</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Danh sách nhà cung cấp</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1"><img src="@item.HINHANH" style="width:30px;height:30px;" /> @item.MANUOCGIAIKHAT</td>
+                                            <td>@item.MATHANG.TENMATHANG</td>
+                                            <td>@item.MATHANG.DONVITINH.TENDONVITINH</td>
+                                            <td>@item.GIABAN</td>
+                                            <td>@item.SOLUONGCON</td>
+                                            <td><a onclick="" style="color:blue;float: left;" href="@Url.Action("Details","NuocGiaiKhat",new {maNuocGiaiKhat=@item.MANUOCGIAIKHAT})">Xem thêm</a></td>
+                                            <td>
+                                                <a onclick=""
+                                                   style="color:blue;float: left;" href="@Url.Action("Details","NuocGiaiKhat",new {maNuocGiaiKhat=@item.MANUOCGIAIKHAT})">Sửa</a>
+                                                <h6 style="float: left;">|</h6>
+                                                <a onclick="xoaNuocGiaiKhat('@item.MANUOCGIAIKHAT')" style="color:blue;float: left;" href="#"> Xóa</a>
+                                            <td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <!--THEM-->
+                                <tfoot>
+                                    <tr>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"><a style="color:blue;float: left;" href="#" onclick="openForm()">Thêm</a></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                <ul class="pagination">
+                                    <li class="paginate_button page-item previous " id="dataTable_previous"><a href="@Url.Action("Index","NuocGiaiKhat",new {id=1,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Đầu</a></li>
+
+                                    @if (ViewBag.CurrentPage - 2 == 1)
+                                    {
+                                        <li class="paginate_button page-item previous " id="dataTable_previous"><a href="@Url.Action("Index","NuocGiaiKhat",new {id=1,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">1</a></li>
+
+                                    }
+                                    else if (ViewBag.CurrentPage - 2 > 1)
+                                    {
+                                        <li><a style="color:black">...</a></li>
+                                        <li class="paginate_button page-item previous " id="dataTable_previous"><a href="@Url.Action("Index","NuocGiaiKhat",new {id=ViewBag.CurrentPage - 2,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">@(ViewBag.CurrentPage - 2)</a></li>
+
+                                    }
+                                    @if (ViewBag.CurrentPage - 1 >= 1)
+                                    {
+                                        <li class="paginate_button page-item previous " id="dataTable_previous">
+                                            <a href="@Url.Action("Index","NuocGiaiKhat",new {id=ViewBag.CurrentPage - 1,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                                @(ViewBag.CurrentPage - 1)
+                                            </a>
+                                        </li>
+
+                                    }
+                                    <li class="paginate_button page-item previous active" id="dataTable_previous">
+                                        <a href="@Url.Action("Index","NuocGiaiKhat",new {id=ViewBag.CurrentPage,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                            @(ViewBag.CurrentPage)
+                                        </a>
+                                    </li>
+
+                                    @if (ViewBag.CurrentPage + 1 <= ViewBag.SoLuongPage)
+                                    {
+                                        <li class="paginate_button page-item previous " id="dataTable_previous">
+                                            <a href="@Url.Action("Index","NuocGiaiKhat",new {id=ViewBag.CurrentPage + 1,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                                @(ViewBag.CurrentPage + 1)
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (ViewBag.CurrentPage + 2 == ViewBag.SoLuongPage)
+                                    {
+                                        <li class="paginate_button page-item previous " id="dataTable_previous">
+                                            <a href="@Url.Action("Index","NuocGiaiKhat",new {id=ViewBag.SoLuongPage,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                                @ViewBag.SoLuongPage
+                                            </a>
+                                        </li>
+                                    }
+                                    else if (ViewBag.CurrentPage + 2 < ViewBag.SoLuongPage)
+                                    {
+                                        <li class="paginate_button page-item previous " id="dataTable_previous">
+                                            <a href="@Url.Action("Index","NuocGiaiKhat",new {id=ViewBag.CurrentPage + 2,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                                @(ViewBag.CurrentPage + 2)
+                                            </a>
+                                        </li>
+                                        <li><a style="color:black">...</a></li>
+
+                                    }
+                                    <li class="paginate_button page-item previous " id="dataTable_previous">
+                                        <a href="@Url.Action("Index","NuocGiaiKhat",new {id=(ViewBag.SoLuongPage),q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                            Cuối(@(ViewBag.SoLuongPage))
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--FORM THEM-->
+<div class="form-popup" id="edit-form" style="color:black">
+    <form class="form-container">
+        <h1>Thêm nước giải khát</h1>
+        <label for="psw"><b>Tên nước giải khát</b></label>
+        <input id="ten-nuoc-giai-khat-edit" type="text" placeholder="Nhập tên nước giải khát" value="" required>
+
+        
+        <div>
+            <label for="psw"><b>Đơn vị</b></label>
+            <select class="chon-don-vi" id="don-vi-select">
+                @try
+                {
+                    foreach (var item in @Model.First().MATHANG.GetAllDonViTinh())
+                    {
+                        <option value=@item.MADONVITINH>@item.TENDONVITINH</option>
+                    }
+                }
+                catch { }
+                
+            </select>
+        </div>
+        <div>
+            <label for="psw"><b>Giá bán</b></label>
+            <input id="gia-ban-edit" type="number" placeholder="Nhập giá bán" value="" required>
+        </div>
+        <div>
+            <label for="psw"><b>Số lượng còn</b></label>
+            <input id="so-luong-con-edit" type="number" placeholder="Nhập số lượng đang có" value="" required>
+        </div>
+        <div>
+            <label for="psw"><b>Hình ảnh</b></label>
+            <input id="hinh-anh-edit" type="text" placeholder="Nhập link hình ảnh" value="">
+        </div>
+        
+        
+        
+        <h6> </h6>
+        <h6 style="height:10px"></h6>
+        <button type="button" class="btn" onclick="themNuocGiaiKhat()" id="btn-them">Thêm</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    function openForm() {
+        document.getElementById("edit-form").style.display = "block";
+        document.getElementById("main-form").className = "main-form-hide";
+        document.getElementById("main-form").style.display = "none";
+    }
+    function closeForm() {
+        document.getElementById("edit-form").style.display = "none";
+        document.getElementById("main-form").className = "main-form";
+        document.getElementById("main-form").style.display = "block";
+    }
+
+    function themNuocGiaiKhat() {
+        $("#don-vi-select").val('DVT06').change();
+        const url = '../../../api/NuocGiaiKhatApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            tenMatHang: $('#ten-nuoc-giai-khat-edit').val(),
+            maDonViTinh: $("select.chon-don-vi").children("option:selected").val(),
+            maLoaiMatHang: 'LH003',
+            giaBan: $('#gia-ban-edit').val(),
+            soLuongCon: $('#so-luong-con-edit').val(),
+            hinhAnh: $('#hinh-anh-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+    function xoaNuocGiaiKhat(maNL) {
+        var result = confirm("Bạn có chắc chắn muốn xóa nước giải khát này khỏi danh sách?");
+        if (result == false)
+            return;
+        else {
+            const url = '../../../api/NuocGiaiKhatApi?';
+            // The data we are going to send in our request
+            let params = {
+                //maNCC: $('#ma-ncc-edit').val(),
+                maMatHangNuocGiaiKhat: maNL,
+            }
+
+            let query = Object.keys(params)
+                     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                     .join('&');
+            // The parameters we are gonna pass to the fetch function
+            let fetchData = {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            fetch(url + query, fetchData)
+            .then(function (res) {
+                // Handle response you get from the server
+                return res.json();
+            }).then(function (data) {
+                alert(data);
+                location.reload();
+            });
+        }
+    }
+    $(document).ready(function () {
+        $("#don-vi-select").val('DVT06').change();
+    });
+</script>
+
+<!--TimKiem-->
+<script>
+    function TimKiem() {
+        var value = $('#tim-kiem-edit').val();
+        location.href = "./1?q="+value;
+    }
+</script>
+
+<style>
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.5;
+        position: fixed;
+    }
+
+    .main-form {
+        opacity: 1;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(20% - 25px);
+        left: calc(50% - 50px);
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password], .form-container input[type=number]{
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 15px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus,.form-container input[type=number]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>
+
+

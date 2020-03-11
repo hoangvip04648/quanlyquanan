@@ -1,0 +1,289 @@
+﻿@model IEnumerable<Models.Framework.NHANVIEN>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card shadow mb-4" id="main-form">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tính lương Nhân viên</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div id="dataTable_filter" class="dataTables_filter">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;color:black">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: auto;">Mã nhân viên</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: auto;">Họ tên</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">SĐT</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Tổng thời gian làm</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Đơn vị</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Lương</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Tổng lương</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Trạng thái</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Chi tiết</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">@item.MANHANVIEN</td>
+                                        <td>@item.ACCOUNT.HOTEN</td>
+                                        <td>@item.ACCOUNT.SDT</td>
+                                        <td>@item.GetTongThoiGianLam()</td>
+                                        <td>@item.DONVITINHLUONG.TENDONVITINHLUONG</td>
+                                        <td>@item.LUONG</td>
+                                        <td><b>@item.GetTongLuongChuaThanhToan()</b></td>
+                                        <td>@(item.TRANGTHAI == true ? "Còn làm việc" : "Đã nghỉ")</td>
+                                        <td>@Html.ActionLink("Xem thêm", "Details", new { maNhanVien = @item.MANHANVIEN.ToString().Trim(), trangThaiThanhToan = 0})</td>
+                                        <td><a onclick="openForm('@item.MANHANVIEN', '@item.ACCOUNT.HOTEN', '@item.GetTongLuongChuaThanhToan()', '@item.GetTongThoiGianLam()','@item.DONVITINHLUONG.TENDONVITINHLUONG')" href="#">Thanh toán</a></td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                            <ul class="pagination">
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--INSERT FORM-->
+<div class="form-popup" id="edit-form" style="color:black">
+    <form class="form-container">
+        <h1 style="text-align:center">Thanh toán</h1>
+        <label for="abc">
+            <b>Mã nhân viên: </b>
+            <input id="ma-nhan-vien-edit" type="text" disabled>
+        </label>
+
+        <label for="abc"  style="width:95%">
+            <b>Họ tên: </b> 
+            <input id="ho-ten-edit" type="text" disabled>
+        </label>
+        <label for="abc">
+            <b>Tổng thời gian làm: </b>
+            <input id="tong-thoi-gian-lam-edit" type="number" disabled style="width:80px">
+            <a id="don-vi-tinh-luong-edit"></a>
+        </label>
+        
+        <label for="abc">
+            <b>Tổng lương: </b>
+            <input id="tong-luong-edit" type="number" disabled style="width:50%;margin-top:10px;margin-left:10px;">
+            VNĐ
+        </label>
+
+        <label for="abc">
+            <b>Khoảng khác: </b>
+            <input id="khoang-khac-edit" type="number"  style="width:50%;margin-top:10px">
+            VNĐ
+        </label>
+
+        <label for="abc"  style="width:95%">
+            <b>Ghi chú: </b>
+            <input id="ghi-chu-edit" type="text">
+        </label>
+
+        <h1> </h1>
+        <h1> </h1>
+
+        <button type="button" class="btn" onclick="thanhToan()" id="btn-sua">Thanh toán</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+
+    </form>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    function openForm(maNhanVien,hoTen,tongLuong,tongThoiGianLam,donViTinhLuong) {
+        document.getElementById("edit-form").style.display = "block";
+        document.getElementById("main-form").className = "main-form-hide";
+        document.getElementById("main-form").style.display = "none";
+        $('#ma-nhan-vien-edit').val(maNhanVien).change();
+        $('#ho-ten-edit').val(hoTen).change();
+        $('#tong-luong-edit').val(tongLuong).change();
+        $('#khoang-khac-edit').val(0).change();
+        $('#ghi-chu-edit').val('').change();
+        $('#tong-thoi-gian-lam-edit').val(tongThoiGianLam).change();
+        $('#don-vi-tinh-luong-edit').text(donViTinhLuong).change();
+    }
+    function closeForm() {
+        document.getElementById("main-form").style.display = "block";
+        document.getElementById("edit-form").style.display = "none";
+        document.getElementById("main-form").className = "main-form";
+    }
+
+    function thanhToan() {
+
+        const url = '../../api/ThanhToanLuongNhanVienApi?';
+        // The data we are going to send in our request
+        let params = {
+            maNhanVien: $('#ma-nhan-vien-edit').val(),
+            tongThoiGianLam: $('#tong-thoi-gian-lam-edit').val(),
+            tongLuong: $('#tong-luong-edit').val(),
+            khoangKhac:$('#khoang-khac-edit').val(),
+            ghiChu:$('#ghi-chu-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+
+    $(document).ready(function () {
+        $("#ngay-sinh-edit").val('1980-01-01').change();
+        var dayStr = new Date().getUTCFullYear()+'-';
+        if (new Date().getUTCMonth() < 10)
+            dayStr += '0' + (new Date().getUTCMonth()+1);
+        else
+            dayStr += (new Date().getUTCMonth()+1);
+        if (new Date().getUTCDate() < 10)
+            dayStr += '-0' + new Date().getUTCDate();
+        else
+            dayStr += '-'+new Date().getUTCDate();
+        $("#ngay-ky-hop-dong-edit").val(dayStr).change();
+    });
+</script>
+
+
+
+
+<style>
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.2;
+        position: fixed;
+    }
+
+    .main-form {
+        opacity: 1;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(10%);
+        left: calc(40% );
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 350px;
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>

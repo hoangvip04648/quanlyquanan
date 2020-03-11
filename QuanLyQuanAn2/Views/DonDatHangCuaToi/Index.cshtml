@@ -1,0 +1,227 @@
+﻿@model IEnumerable<Models.Framework.DONDATHANG>
+
+@{
+    ViewBag.Title = "Index";
+    if (ViewBag.IsKhachHangDaDangNhap)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutChuaLogin.cshtml";
+    }
+}
+<div style="width:96%; text-align:center;margin-left:2%">
+    <div class="hero-wrap hero-bread" style="background-image: url(/Assets/khachhang/image/shopping-cart.jpg); width:100%;height:40px;text-align:center;display: inline-block"></div>
+</div>
+<div style="border-style:solid;width:96%;align-self:center;margin-left:2%" >
+    <div class="textFontStyle" style="margin-left:15%">
+        <h2 style="color:green;margin-left:30%">Đơn hàng của tôi</h2>
+        @foreach (var item in Model) //Duyet tung don dat hang
+        {
+            <hr />
+            <div>
+                <table style="width:80%">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <b style="color:forestgreen">Mã đơn hàng: @item.MADON</b>
+                            </td>
+                            <td>
+                                <a>Thời gian đặt: @(item.THOIGIAN)s @item.NGAY.Value.ToString("dd/MM/yyyy").</a>
+
+                            </td>
+                            <td>
+                                <a>Tổng tiền: @item.GetTongTien() VNĐ</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a>Số điện thoại: @item.KHACHHANG.ACCOUNT.SDT</a>
+                            </td>
+                            <td>
+                                <a>Địa chỉ giao hàng: @item.DIACHIGIAOHANG</a>
+                            </td>
+                            <td>
+                                <a>Ghi chú: @item.GHICHU</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a>Tình trạng: @(item.TINHTRANGDONHANG.Value == 0 ? "Chưa xác nhận." : (item.TINHTRANGDONHANG.Value == 1 ? "Đã xác nhận." : (item.TINHTRANGDONHANG.Value == 2 ? "Đã giao." : "Đã hủy.")))</a>
+
+                            </td>
+                            <td><a>Ghi chú người bán: </a>@item.GHICHUCUANGUOIBAN</td>
+                            <td>
+                                @if (item.TINHTRANGDONHANG == 0)
+                                {
+                                    <button onclick="HuyDonHang('@item.MADON')" style="background-color:darksalmon">Hủy đơn hàng</button>
+                                }
+                                else
+                                {
+
+                                }
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+
+                </div>
+
+
+                <table class="don-hang-table">
+                    <tr>
+                        <th class="tditem" style="text-align:center;">
+                            Hình ảnh
+                        </th>
+                        <th class="tditem">
+                            Sản phẩm
+                        </th>
+                        <th class="tditem">
+                            Số lượng
+                        </th>
+                        <th class="tditem">
+                            Đơn giá
+                        </th>
+                    </tr>
+
+                    @foreach (var ct in item.CT_DONDATHANG)
+                {
+                        <tr class="rowItem">
+                            <td class="tditem">
+                                <div style="text-align:center">
+                                    <img src="@(ct.MATHANG.MALOAIMATHANG== "LH004" ? ct.MATHANG.MONAN.HINHANH : ct.MATHANG.NUOCGIAIKHAT.HINHANH)" class="product-image">
+                                </div>
+                            </td>
+                            <td class="tditem">
+                                @ct.MATHANG.TENMATHANG
+                            </td>
+                            <td class="tditem">
+                                @ct.SOLUONG
+                            </td>
+                            <td class="tditem">
+                                @ct.DONGIA
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        }
+    </div>
+    <hr />
+    <div style="width:80%; text-align:right;">
+        <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=1})" class="LinkButton">Đầu</a>
+        @if (ViewBag.CurrentPage - 2 == 1)
+        {
+            <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=1})" class="LinkButton">1</a>
+        }
+        else if (ViewBag.CurrentPage - 2 > 1)
+        {
+            <a style="color:black">...</a>
+            <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=ViewBag.CurrentPage - 2})" class="LinkButton">@(ViewBag.CurrentPage - 2)</a>
+        }
+        @if (ViewBag.CurrentPage - 1 >= 1)
+        {
+            <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=ViewBag.CurrentPage - 1})" class="LinkButton">@(ViewBag.CurrentPage - 1)</a>
+        }
+        <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=ViewBag.CurrentPage})" class="LinkButton" style="color:white; border-color:white; background-color:#82ae46;">@ViewBag.CurrentPage</a>
+        @if (ViewBag.CurrentPage + 1 <= ViewBag.SoLuongPage)
+        {
+            <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=ViewBag.CurrentPage + 1})" class="LinkButton">@(ViewBag.CurrentPage + 1)</a>
+        }
+        @if (ViewBag.CurrentPage + 2 == ViewBag.SoLuongPage)
+        {
+            <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=ViewBag.SoLuongPage})" class="LinkButton">@ViewBag.SoLuongPage</a>
+        }
+        else if (ViewBag.CurrentPage + 2 < ViewBag.SoLuongPage)
+        {
+            <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=ViewBag.CurrentPage + 2})" class="LinkButton">@(ViewBag.CurrentPage + 2)</a>
+            <a style="color:black">...</a>
+        }
+
+
+        <a href="@Url.Action("Index","DonDatHangCuaToi",new {id=(ViewBag.SoLuongPage)})" class="LinkButton">Cuối(@(ViewBag.SoLuongPage))</a>
+
+    </div>
+    <hr />
+
+</div>
+<script>
+    function HuyDonHang(MaDon) {
+        var res = confirm("Bạn có chắc muốn hủy đơn hàng này?");
+        if (res < 1)
+            return;
+        else {
+            if ('@ViewBag.IsKhachHangDaDangNhap' != 'True') {
+                location.href = '@Url.Action("Index","DangNhap")';
+                return;
+            }
+            const url = '../../api/DonDatHangCuaToiApi?';
+            // The data we are going to send in our request
+            let params = {
+                //maNCC: $('#ma-ncc-edit').val(),
+                maDon: MaDon,
+            }
+
+            let query = Object.keys(params)
+                     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                     .join('&');
+            // The parameters we are gonna pass to the fetch function
+            let fetchData = {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            fetch(url + query, fetchData)
+            .then(function (res) {
+                // Handle response you get from the server
+                return res.json();
+            }).then(function (data) {
+                alert(data);
+                location.reload();
+            });
+
+        }
+    }
+
+
+</script>
+
+
+<style>
+    .textFontStyle {
+        color: black;
+    }
+    .product-image {
+    width: auto;
+    height:50px;
+    }
+    .don-hang-table{
+        width:80%;
+        
+    }
+    .rowItem{
+        border-style: ridge ;
+    }
+    .tditem{
+        padding-top: 5px;
+      padding-right: 10px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+    }
+    a.LinkButton {
+      border-style: solid;
+      border-width : 1px 1px 1px 1px;
+      text-decoration : none;
+      padding : 4px;
+      border-color : #000000;
+      color:black;
+    }
+</style>
+

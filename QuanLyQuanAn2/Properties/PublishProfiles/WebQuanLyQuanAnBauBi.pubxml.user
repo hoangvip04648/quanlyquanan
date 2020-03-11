@@ -1,0 +1,523 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Published\WebQuanAnBauBi</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Areas/Admin/Views/BaoCaoBanHang/Index.cshtml">
+      <publishTime>12/16/2019 12:13:26</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/BaoCaoHangNgay/Index.cshtml">
+      <publishTime>12/16/2019 14:26:23</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/BaoCaoThuChi/Index.cshtml">
+      <publishTime>12/16/2019 12:14:00</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/ChamCongNhanVien/Index.cshtml">
+      <publishTime>12/17/2019 14:41:15</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DonDatHang/Details.cshtml">
+      <publishTime>12/17/2019 18:39:16</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DonDatHang/Edit.cshtml">
+      <publishTime>12/01/2019 22:47:52</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DonDatHang/Index.cshtml">
+      <publishTime>12/17/2019 17:55:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DonViThamSo/Index.cshtml">
+      <publishTime>12/06/2019 15:38:33</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DonViTinh/Index.cshtml">
+      <publishTime>12/17/2019 17:31:04</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DonViTinhLuong/Index.cshtml">
+      <publishTime>12/17/2019 17:31:10</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DungCu/Details.cshtml">
+      <publishTime>12/17/2019 17:05:56</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/DungCu/Index.cshtml">
+      <publishTime>12/17/2019 11:16:11</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Login/Index.cshtml">
+      <publishTime>12/16/2019 14:56:02</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/MenuMonAn/Index.cshtml">
+      <publishTime>12/17/2019 16:28:59</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/MenuNuocGiaiKhat/Index.cshtml">
+      <publishTime>12/17/2019 16:41:19</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/MonAn/Details.cshtml">
+      <publishTime>12/17/2019 17:27:52</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/MonAn/Index.cshtml">
+      <publishTime>12/17/2019 11:09:47</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NguyenLieu/Details.cshtml">
+      <publishTime>12/17/2019 17:03:27</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NguyenLieu/Index.cshtml">
+      <publishTime>12/17/2019 16:50:39</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NhaCungCap/Index.cshtml">
+      <publishTime>12/17/2019 17:29:51</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NhanVien/Create.cshtml">
+      <publishTime>12/07/2019 16:49:39</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NhanVien/Details.cshtml">
+      <publishTime>12/17/2019 14:20:37</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NhanVien/Index.cshtml">
+      <publishTime>12/17/2019 13:54:03</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NhapMatHang/Index.cshtml">
+      <publishTime>12/11/2019 20:52:17</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NhapMatHang/Index2.cshtml">
+      <publishTime>12/17/2019 17:42:24</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NuocGiaiKhat/Details.cshtml">
+      <publishTime>12/17/2019 17:19:04</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/NuocGiaiKhat/Index.cshtml">
+      <publishTime>12/17/2019 13:37:19</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/QuanLy/Index.cshtml">
+      <publishTime>12/16/2019 14:06:39</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/QuanLyKhachHang/Index.cshtml">
+      <publishTime>12/17/2019 17:52:37</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Shared/_Layout.cshtml">
+      <publishTime>12/17/2019 18:12:32</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/ThamSo/Index.cshtml">
+      <publishTime>12/17/2019 17:31:24</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/ThanhToanLuongNhanVien/Index.cshtml">
+      <publishTime>12/17/2019 16:19:09</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/TinhLuongNhanVien/Details.cshtml">
+      <publishTime>12/17/2019 15:52:08</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/TinhLuongNhanVien/Index.cshtml">
+      <publishTime>12/17/2019 15:37:19</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/web.config">
+      <publishTime>11/28/2019 12:58:20</publishTime>
+    </File>
+    <File Include="Areas/NhanVien/Views/DonGoiMon/Index.cshtml">
+      <publishTime>12/16/2019 18:28:16</publishTime>
+    </File>
+    <File Include="Areas/NhanVien/Views/NVLogin/Index.cshtml">
+      <publishTime>12/16/2019 14:59:38</publishTime>
+    </File>
+    <File Include="Areas/NhanVien/Views/Shared/_Layout.cshtml">
+      <publishTime>12/16/2019 18:34:13</publishTime>
+    </File>
+    <File Include="Areas/NhanVien/Views/web.config">
+      <publishTime>12/11/2019 17:32:15</publishTime>
+    </File>
+    <File Include="Assets/admin/gulpfile.js">
+      <publishTime>11/27/2019 17:31:45</publishTime>
+    </File>
+    <File Include="Assets/admin/img/icon-food.jpg">
+      <publishTime>12/17/2019 18:03:42</publishTime>
+    </File>
+    <File Include="Assets/admin/js/Chart.min.js">
+      <publishTime>12/15/2019 14:05:33</publishTime>
+    </File>
+    <File Include="Assets/admin/js/demo/chart-area-demo.js">
+      <publishTime>11/27/2019 17:31:45</publishTime>
+    </File>
+    <File Include="Assets/admin/js/demo/chart-bar-demo.js">
+      <publishTime>11/27/2019 17:31:45</publishTime>
+    </File>
+    <File Include="Assets/admin/js/demo/chart-pie-demo.js">
+      <publishTime>12/16/2019 11:02:57</publishTime>
+    </File>
+    <File Include="Assets/admin/js/demo/datatables-demo.js">
+      <publishTime>11/27/2019 17:31:45</publishTime>
+    </File>
+    <File Include="Assets/admin/js/sb-admin-2.js">
+      <publishTime>11/27/2019 17:31:45</publishTime>
+    </File>
+    <File Include="Assets/admin/js/sb-admin-2.min.js">
+      <publishTime>11/27/2019 17:31:45</publishTime>
+    </File>
+    <File Include="Assets/admin/js/utils.js">
+      <publishTime>12/15/2019 14:15:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/.DS_Store">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/ajax-loader.gif">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/animate.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/aos.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/bootstrap-datepicker.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/bootstrap.min.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/bootstrap/.DS_Store">
+      <publishTime>12/12/2019 09:29:15</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/bootstrap/bootstrap-grid.css">
+      <publishTime>12/12/2019 09:29:15</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/bootstrap/bootstrap-reboot.css">
+      <publishTime>12/12/2019 09:29:15</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/css/.DS_Store">
+      <publishTime>12/12/2019 09:29:09</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/css/bootstrap-reboot.css">
+      <publishTime>12/12/2019 09:29:10</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/css/mixins/.DS_Store">
+      <publishTime>12/12/2019 09:29:12</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/css/mixins/_text-hide.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/flaticon.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/icomoon.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/ionicons.min.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/jquery.timepicker.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/magnific-popup.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/open-iconic-bootstrap.min.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/owl.carousel.min.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/owl.theme.default.min.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/css/style.css">
+      <publishTime>12/12/2019 09:29:13</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/.DS_Store">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/.DS_Store">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/backup.txt">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/.DS_Store">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/flaticon.css">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/Flaticon.eot">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/flaticon.html">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/Flaticon.svg">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/Flaticon.ttf">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/Flaticon.woff">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/Flaticon.woff2">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/font/_flaticon.scss">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/flaticon/license/license.pdf">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/icomoon/icomoon.eot">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/icomoon/icomoon.svg">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/icomoon/icomoon.ttf">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/icomoon/icomoon.woff">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/css/ionicons.min.css">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/css/_ionicons.scss">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/fonts/.DS_Store">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/fonts/ionicons.eot">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/fonts/ionicons.svg">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/fonts/ionicons.ttf">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/fonts/ionicons.woff">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/ionicons/fonts/ionicons.woff2">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/open-iconic/open-iconic.eot">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/open-iconic/open-iconic.otf">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/open-iconic/open-iconic.svg">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/open-iconic/open-iconic.ttf">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/fonts/open-iconic/open-iconic.woff">
+      <publishTime>12/12/2019 11:03:33</publishTime>
+    </File>
+    <File Include="Assets/khachhang/image/anh-nen-info.png">
+      <publishTime>12/14/2019 21:08:40</publishTime>
+    </File>
+    <File Include="Assets/khachhang/image/canh-kho-qua.jpg">
+      <publishTime>12/12/2019 15:25:30</publishTime>
+    </File>
+    <File Include="Assets/khachhang/image/shopping-cart.jpg">
+      <publishTime>12/12/2019 22:51:17</publishTime>
+    </File>
+    <File Include="Assets/khachhang/image/thit-kho-trung-cut.jpg">
+      <publishTime>12/12/2019 15:25:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/.DS_Store">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/aos.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/bootstrap-datepicker.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/bootstrap.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/google-map.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery-3.2.1.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery-migrate-3.0.1.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery.animateNumber.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery.easing.1.3.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery.magnific-popup.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery.stellar.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/jquery.waypoints.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/main.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/owl.carousel.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/popper.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/range.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/khachhang/js/scrollax.min.js">
+      <publishTime>12/12/2019 09:31:26</publishTime>
+    </File>
+    <File Include="Assets/nhanvien/css/bootstrap.css">
+      <publishTime>12/10/2019 15:49:52</publishTime>
+    </File>
+    <File Include="Assets/nhanvien/css/style.css">
+      <publishTime>12/10/2019 15:49:02</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>03/02/2015 09:32:26</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>03/02/2015 09:32:26</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>06/15/2015 02:06:24</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>04/23/2012 15:23:58</publishTime>
+    </File>
+    <File Include="bin/Models.dll">
+      <publishTime>12/17/2019 20:16:06</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>08/03/2014 20:33:56</publishTime>
+    </File>
+    <File Include="bin/QuanLyQuanAn2.dll">
+      <publishTime>12/17/2019 20:21:35</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>06/18/2015 20:19:44</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>01/28/2015 04:02:42</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>01/28/2015 04:02:54</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>01/28/2015 04:03:46</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>01/28/2015 04:02:18</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>01/28/2015 04:02:32</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Deployment.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Razor.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>11/27/2019 16:20:52</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>12/01/2019 22:40:58</publishTime>
+    </File>
+    <File Include="Views/DangNhap/Index.cshtml">
+      <publishTime>12/16/2019 20:38:32</publishTime>
+    </File>
+    <File Include="Views/DangNhap/Register.cshtml">
+      <publishTime>12/16/2019 20:39:03</publishTime>
+    </File>
+    <File Include="Views/DonDatHangCuaToi/Index.cshtml">
+      <publishTime>12/14/2019 21:10:43</publishTime>
+    </File>
+    <File Include="Views/GioHang/Index.cshtml">
+      <publishTime>12/16/2019 20:51:44</publishTime>
+    </File>
+    <File Include="Views/GioiThieu/Index.cshtml">
+      <publishTime>12/17/2019 18:48:17</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>12/13/2019 13:25:26</publishTime>
+    </File>
+    <File Include="Views/MenuSanPham/Index.cshtml">
+      <publishTime>12/17/2019 18:47:03</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>12/16/2019 21:01:32</publishTime>
+    </File>
+    <File Include="Views/Shared/_LayoutChuaLogin.cshtml">
+      <publishTime>12/16/2019 21:05:33</publishTime>
+    </File>
+    <File Include="Views/ThongTinCaNhan/Edit.cshtml">
+      <publishTime>12/14/2019 22:24:48</publishTime>
+    </File>
+    <File Include="Views/ThongTinCaNhan/EditPassword.cshtml">
+      <publishTime>12/15/2019 00:13:04</publishTime>
+    </File>
+    <File Include="Views/ThongTinCaNhan/Index.cshtml">
+      <publishTime>12/15/2019 00:28:18</publishTime>
+    </File>
+    <File Include="Views/web.config">
+      <publishTime>11/27/2019 16:20:52</publishTime>
+    </File>
+    <File Include="Views/XacNhanDatHang/Index.cshtml">
+      <publishTime>12/14/2019 18:17:44</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>12/17/2019 20:21:35</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

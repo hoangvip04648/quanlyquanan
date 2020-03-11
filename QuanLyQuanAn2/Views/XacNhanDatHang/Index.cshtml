@@ -1,0 +1,400 @@
+﻿@model List<Models.Framework.CT_GIOHANG>
+@{
+    ViewBag.Title = "Index";
+    if (ViewBag.IsKhachHangDaDangNhap)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutChuaLogin.cshtml";
+    }
+}
+<div style="width:100%; text-align:center">
+    <div class="hero-wrap hero-bread" style="background-image: url(/Assets/khachhang/image/shopping-cart.jpg); width:100%;height:40px;text-align:center;display: inline-block"></div>
+</div>
+<div style="border-style:solid;">
+    <div class="textFontStyle" style="margin-left:15%;">
+        <h2 style="color:green">Xác nhận đặt hàng</h2>
+        <div>
+            <a>Họ tên: @Model.First().KHACHHANG.ACCOUNT.HOTEN</a>
+        </div>
+        <a>Số điện thoại: @Model.First().KHACHHANG.ACCOUNT.SDT</a>
+        <div>
+            <a>Địa chỉ giao hàng: </a>
+        </div>
+        <input value="@Model.First().KHACHHANG.DIACHINHANHANG" style="width:40%" id="dia-chi-edit" />
+        <div>
+            <a>Ghi chú: </a>
+
+        </div>
+        <div style="width:80%">
+            <textarea style="width:50%;" id="ghi-chu-edit"></textarea>
+
+        </div>
+
+        <table class="don-hang-table">
+            <tr>
+                <th class="tditem" style="text-align:center;">
+                    Hình ảnh
+                </th>
+                <th class="tditem">
+                    Sản phẩm
+                </th>
+                <th class="tditem">
+                    Số lượng
+                </th>
+                <th class="tditem">
+                    Đơn giá
+                </th>
+            </tr>
+
+            @foreach (var ct in Model)
+            {
+                <tr class="rowItem">
+                    <td class="tditem">
+                        <div style="text-align:center">
+                            <img src="@(ct.MATHANG.MALOAIMATHANG== "LH004" ? ct.MATHANG.MONAN.HINHANH : ct.MATHANG.NUOCGIAIKHAT.HINHANH)" class="product-image">
+                        </div>
+                    </td>
+                    <td class="tditem">
+                        @ct.MATHANG.TENMATHANG
+                    </td>
+                    <td class="tditem">
+                        @ct.SOLUONG
+                    </td>
+                    <td class="tditem">
+                        @(ct.MATHANG.MALOAIMATHANG == "LH004" ? ct.MATHANG.MONAN.GIABAN : ct.MATHANG.NUOCGIAIKHAT.GIABAN)
+                    </td>
+                </tr>
+            }
+        </table>
+        <div class="totals" style="width:73%;margin-top:10px;margin-bottom:100px;">
+            <div class="totals-item">
+                <label style="color:black"><b>Tổng cộng</b></label>
+                @{
+                    int S = 0;
+                    foreach (var item in Model)
+                    {
+                        if (item.MATHANG.MALOAIMATHANG == "LH004")
+                        {
+                            S += item.MATHANG.MONAN.GIABAN.Value * item.SOLUONG.Value;
+                        }
+                        else
+                        {
+                            S += item.MATHANG.NUOCGIAIKHAT.GIABAN.Value * item.SOLUONG.Value;
+                        }
+                    }
+                    <div class="totals-value" id="cart-subtotal">
+                        <b>@S</b>
+                    </div>
+                }
+            </div>
+            <div style="width:100%">
+                <button class="checkout" style="margin-left:20px" onclick="DatHang()">Đặt hàng</button>
+                <button class="huydon" onclick="QuayVeGioHang()">Hủy</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<hr />
+<hr />
+
+
+<script>
+    function QuayVeGioHang() {
+        location.href="@Url.Action("Index", "GioHang")";
+    }
+    function DatHang() {
+        if ('@ViewBag.IsKhachHangDaDangNhap' != 'True') {
+            location.href = '@Url.Action("Index","DangNhap")';
+            return;
+        }
+        const url = '../api/DonDatHangCuaToiApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            diaChiGiaoHang: $('#dia-chi-edit').val(),
+            ghiChu: $('#ghi-chu-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.href = "@Url.Action("Index", "DonDatHangCuaToi",new {id=1})";
+        });
+    }
+</script>
+
+<style>
+    .textFontStyle {
+        color: black;
+    }
+    .product-image {
+    width: auto;
+    height:50px;
+    }
+    .don-hang-table{
+        width:80%;
+        
+    }
+    .rowItem{
+        border-style: ridge ;
+    }
+    .tditem{
+        padding-top: 5px;
+      padding-right: 10px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+    }
+</style>
+
+
+
+<style>
+   
+    /* This is used as the traditional .clearfix class */
+    .group:before, .shopping-cart:before, .column-labels:before, .product:before, .totals-item:before,
+    .group:after,
+    .shopping-cart:after,
+    .column-labels:after,
+    .product:after,
+    .totals-item:after {
+        content: '';
+        display: table;
+    }
+
+    .group:after, .shopping-cart:after, .column-labels:after, .product:after, .totals-item:after {
+        clear: both;
+    }
+
+    .group, .shopping-cart, .column-labels, .product, .totals-item {
+        zoom: 1;
+    }
+
+        /* Apply clearfix in a few places */
+        /* Apply dollar signs */
+        .product .product-price:after, .product .product-line-price:after, .totals-value:after {
+            content: ' VNĐ';
+        }
+
+    /* Body/Header stuff */
+    body {
+        padding: 0px 30px 30px 20px;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 100;
+    }
+
+    h1 {
+        font-weight: 100;
+    }
+
+    label {
+        color: #aaa;
+    }
+
+    .shopping-cart {
+        margin-top: -45px;
+    }
+
+    /* Column headers */
+    .column-labels label {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .column-labels .product-image, .column-labels .product-details, .column-labels .product-removal {
+        text-indent: -9999px;
+    }
+
+    /* Product entries */
+    .product {
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .product .product-image {
+            text-align: center;
+        }
+
+            .product .product-image img {
+                width: 100px;
+            }
+
+        .product .product-details .product-title {
+            margin-right: 20px;
+            font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
+        }
+
+        .product .product-details .product-description {
+            margin: 5px 20px 5px 0;
+            line-height: 1.4em;
+        }
+
+        .product .product-quantity input {
+            width: 40px;
+        }
+
+        .product .remove-product {
+            border: 0;
+            padding: 4px 8px;
+            background-color: #c66;
+            color: #fff;
+            font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
+            font-size: 12px;
+            border-radius: 3px;
+        }
+
+            .product .remove-product:hover {
+                background-color: #a44;
+            }
+
+    /* Totals section */
+    .totals .totals-item {
+        float: right;
+        clear: both;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+        .totals .totals-item label {
+            float: left;
+            clear: both;
+            width: 79%;
+            text-align: right;
+        }
+
+        .totals .totals-item .totals-value {
+            float: right;
+            width: 21%;
+            text-align: right;
+        }
+
+    .totals .totals-item-total {
+        font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
+    }
+
+    .checkout {
+        float:right;
+        border: 0;
+        padding: 3px 10px;
+        background-color: #6b6;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 3px;
+    }
+
+        .checkout:hover {
+            background-color: #494;
+        }
+    .huydon {
+        float: right;
+        border: 0;
+        padding: 3px 10px;
+        background-color: #f59595;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 3px;
+    }
+
+        .huydon:hover {
+            background-color: #ff6969;
+        }
+</style>
+<style>
+    @@media screen and (max-width: 650px) {
+        .shopping-cart {
+            margin: 0;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .column-labels {
+            display: none;
+        }
+
+        .product-image {
+            float: right;
+            width: auto;
+        }
+
+            .product-image img {
+                margin: 0 0 10px 10px;
+            }
+
+        .product-details {
+            float: none;
+            margin-bottom: 10px;
+            width: auto;
+        }
+
+        .product-price {
+            clear: both;
+            width: 70px;
+        }
+
+        .product-quantity {
+            width: 100px;
+        }
+
+            .product-quantity input {
+                margin-left: 20px;
+            }
+
+            .product-quantity:before {
+                content: 'x';
+            }
+
+        .product-removal {
+            width: auto;
+        }
+
+        .product-line-price {
+            float: right;
+            width: 70px;
+        }
+    }
+    /* Make more adjustments for phone */
+    @@media screen and (max-width: 350px) {
+        .product-removal {
+            float: right;
+        }
+
+        .product-line-price {
+            float: right;
+            clear: left;
+            width: auto;
+            margin-top: 10px;
+        }
+
+        .product .product-line-price:before {
+            content: 'Item Total: $';
+        }
+
+        .totals .totals-item label {
+            width: 60%;
+        }
+
+        .totals .totals-item .totals-value {
+            width: 40%;
+        }
+    }
+</style>

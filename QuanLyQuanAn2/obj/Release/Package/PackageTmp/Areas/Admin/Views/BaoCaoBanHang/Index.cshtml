@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div id="print-area">
+    <div style="color:black;margin-left:5%" id="select-thang">
+        <h6>Chọn tháng muốn xem báo cáo</h6>
+        <input id="thang-bao-cao-edit" type="month" value="@(ViewBag.Nam)-@(ViewBag.Thang)" />
+        <button style="background-color:aliceblue" id="btn-xem-bao-cao-khac">Xem</button>
+        <!--In bao cao-->
+        <button id="btn-print" style="margin-left:1%;background:aliceblue;">In báo cáo</button>
+    </div>
+    <hr />
+    <br />
+    <h5 style="color:blue;width:70%;text-align:center">
+        <b>
+            Báo cáo tình hình bán hàng tháng @(ViewBag.Thang)/@(ViewBag.Nam)
+        </b>
+    </h5>
+    <br />
+    <!--BieuDo-->
+    <div style="width:65%;color:black;">
+        <canvas id="canvas"></canvas>
+    </div>
+
+
+    <!--Bang xep hang-->
+    <!--Bao cao thu-->
+    <br />
+    <div style="width:100%; color:black;margin-left:5%">
+        <h5 style="color:blue;margin-left:2%">
+            Bảng xếp hạng món ăn và nước giải khát tháng @(ViewBag.Thang)/@(ViewBag.Nam)
+        </h5>
+
+        <table style="width:80%">
+            <tbody>
+                <tr>
+                    <td style="vertical-align:top">
+                        <h6 style="margin-left:5%;">Bảng xếp hạng món ăn</h6>
+                        <table style="border-style:groove; margin-left:5%; min-width:70%;">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã món</th>
+                                    <th>Tên món</th>
+                                    <th>Đã bán</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (@ViewBag.BXHMONAN != null)
+                                {
+                                    int i = 0;
+                                    foreach (var item in @ViewBag.BXHMONAN)
+                                    {
+                                        i++;
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.MAMATHANG</td>
+                                            <td>@item.MATHANG.TENMATHANG</td>
+                                            <td>@item.TONGDABAN</td>
+                                        </tr>
+                                    }
+                                }                                
+                            </tbody>
+                        </table>
+                    </td>
+                    <td style="vertical-align:top">
+                        <h6 style="margin-left:5%">Bảng xếp hạng nước giải khát</h6>
+                        <table style="border-style:groove; margin-left:5%; min-width:70%;">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã NGK</th>
+                                    <th>Tên NGK</th>
+                                    <th>Đã bán</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (@ViewBag.BXHNGK != null)
+                                {
+                                    int i = 0;
+                                    foreach (var item in @ViewBag.BXHNGK)
+                                    {
+                                        i++;
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.MAMATHANG</td>
+                                            <td>@item.MATHANG.TENMATHANG</td>
+                                            <td>@item.TONGDABAN</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr></tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<br />
+<br />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    document.getElementById("btn-print").addEventListener("click", function() {
+        var accordionSidebar=document.getElementById("accordionSidebar");
+        var printButton = document.getElementById("btn-print");
+        var selectThangInput = document.getElementById("select-thang");
+        printButton.style.visibility = 'hidden';
+        accordionSidebar.style.visibility = 'hidden';
+        selectThangInput.style.visibility= 'hidden';
+        window.print();
+        printButton.style.visibility = 'visible';
+        accordionSidebar.style.visibility = 'visible';
+        selectThangInput.style.visibility = 'visible';
+    });
+    document.getElementById("btn-xem-bao-cao-khac").addEventListener("click", function() {
+        var thangBC=$("#thang-bao-cao-edit").val();
+        location.href="./BaoCaoThuChi?thang="+thangBC.split('-')[1]+"&nam="+thangBC.split('-')[0];
+    });
+</script>
+
+<br>
+<br>
+
+
+
+
+<!--Tao bieu do bao cao-->
+<script src="~/Assets/admin/js/Chart.min.js"></script>
+<script src="~/Assets/admin/js/utils.js"></script>
+<script>
+    var DAYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+    var numDay = new Date().getDate();
+    var listDay = [];
+    for (var i = 1; i <= @ViewBag.SoNgayCanHienThi ; i++) {
+        listDay.push(i + '');
+    }
+    var config = {
+        type: 'line',
+        data: {
+            labels: listDay,
+            datasets: [{
+                label: 'Số sản phẩm được bán online',
+                backgroundColor: window.chartColors.purple,
+                borderColor: window.chartColors.purple,
+                data: [
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=1?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[0]:0),
+					@(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=2?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[1]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=3?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[2]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=4?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[3]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=5?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[4]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=6?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[5]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=7?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[6]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=8?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[7]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=9?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[8]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=10?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[9]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=11?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[10]:0),
+					@(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=12?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[11]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=13?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[12]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=14?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[13]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=15?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[14]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=16?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[15]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=17?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[16]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=18?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[17]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=19?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[18]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=20?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[19]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=21?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[20]:0),
+					@(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=22?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[21]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=23?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[22]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=24?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[23]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=25?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[24]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=26?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[25]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=27?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[26]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=28?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[27]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=29?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[28]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=30?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[29]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang.Count>=31?@ViewBag.BaoCaoSoSanPhamBanOnlineCuaThang[30]:0),
+                ],
+                fill: false,
+            },{
+                label: 'Số sản phẩm được bán tại quán',
+                fill: false,
+                backgroundColor: window.chartColors.blue,
+                borderColor: window.chartColors.blue,
+                data: [
+					@(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=1?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[0]:0),
+					@(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=2?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[1]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=3?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[2]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=4?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[3]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=5?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[4]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=6?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[5]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=7?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[6]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=8?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[7]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=9?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[8]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=10?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[9]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=11?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[10]:0),
+					@(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=12?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[11]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=13?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[12]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=14?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[13]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=15?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[14]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=16?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[15]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=17?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[16]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=18?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[17]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=19?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[18]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=20?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[19]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=21?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[20]:0),
+					@(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=22?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[21]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=23?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[22]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=24?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[23]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=25?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[24]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=26?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[25]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=27?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[26]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=28?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[27]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=29?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[28]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=30?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[29]:0),
+                    @(ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang.Count>=31?@ViewBag.BaoCaoSoSanPhamBanTaiQuanCuaThang[30]:0),
+                ],
+            }, {
+                label: 'Tổng số sản phẩm đã bán',
+                fill: false,
+                backgroundColor: window.chartColors.red,
+                borderColor: window.chartColors.red,
+                data: [
+					@(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=1?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[0]:0),
+					@(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=2?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[1]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=3?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[2]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=4?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[3]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=5?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[4]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=6?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[5]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=7?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[6]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=8?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[7]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=9?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[8]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=10?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[9]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=11?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[10]:0),
+					@(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=12?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[11]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=13?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[12]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=14?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[13]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=15?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[14]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=16?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[15]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=17?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[16]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=18?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[17]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=19?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[18]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=20?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[19]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=21?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[20]:0),
+					@(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=22?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[21]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=23?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[22]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=24?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[23]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=25?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[24]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=26?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[25]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=27?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[26]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=28?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[27]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=29?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[28]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=30?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[29]:0),
+                    @(ViewBag.BaoCaoSoSanPhamDaBanCuaThang.Count>=31?@ViewBag.BaoCaoSoSanPhamDaBanCuaThang[30]:0),
+                ],
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Biểu đồ báo cáo tình hình bán hàng tháng @ViewBag.Thang / @ViewBag.nam'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Ngày'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Số sản phẩm được bán'
+                    }
+                }]
+            }
+        }
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myLine = new Chart(ctx, config);
+
+
+    };
+
+
+    var colorNames = Object.keys(window.chartColors);
+
+
+
+</script>
+
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>

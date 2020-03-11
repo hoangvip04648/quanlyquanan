@@ -1,0 +1,442 @@
+﻿@model Models.Framework.DONDATHANG
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<!--PhanChinh-->
+<div class="main-form" id="main-form">
+    <form>
+        <fieldset >
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="OuputMaDon">Mã Đơn:</label>
+                    <input type="text" class="form-control" placeholder="@Model.MADON" disabled>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="OuputHoTen">Họ Tên Khách Hàng:</label>
+                    <input type="text" class="form-control" placeholder="@Model.KHACHHANG.ACCOUNT.HOTEN" disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label>Số Điện Thoại:</label>
+                    <input type="text" class="form-control" placeholder="@Model.KHACHHANG.ACCOUNT.SDT" disabled>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Giới Tính</label>
+                    <input type="text" class="form-control" placeholder="@Model.KHACHHANG.ACCOUNT.GIOITINH" disabled>
+                </div>
+            </div>
+            <div class="form-row">
+
+
+            </div>
+            <div class="form-group">
+                <label>Thời Gian:</label>
+                <input type="datetime" class="form-control" placeholder="@Model.NGAY.Value.ToString("dd/MM/yyyy") @(Model.THOIGIAN)s" disabled>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label for="inputCity">Địa Chỉ:</label>
+                    <input type="text" class="form-control" placeholder="@Model.DIACHIGIAOHANG" disabled>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Trạng Thái:</label>
+                    <select id="inputState" class="form-control tinh-trang">
+                        <option value=0 @(@Model.TINHTRANGDONHANG == 0 ? "selected" : "")>Chưa xác nhận</option>
+                        <option value=1 @(@Model.TINHTRANGDONHANG == 1 ? "selected" : "")>Đã xác nhận</option>
+                        <option value=2 @(@Model.TINHTRANGDONHANG == 2 ? "selected" : "")>Đã giao</option>
+                        <option value=3 @(@Model.TINHTRANGDONHANG == 3 ? "selected" : "")>Hủy</option>
+                    </select>
+                </div>
+
+            </div>
+        </fieldset>
+        <h6 />
+        <h6 />
+        <div>
+            <h6>Chi tiết:</h6>
+            <table class="table table-bordered dataTable" id="dataTable" cellspacing="0" role="grid" aria-describedby="dataTable_info">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Tên món</th>
+                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Số lượng</th>
+                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Đơn giá</th>
+                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Thành tiền</th>
+                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.CT_DONDATHANG)
+                    {
+                        <tr role="row" class="odd">
+                            <td class="sorting_1">@item.MATHANG.TENMATHANG</td>
+                            <td>@(item.SOLUONG)</td>
+                            <td>@(item.DONGIA)</td>
+                            <td>@(item.SOLUONG * item.DONGIA)</td>
+
+                            <td>
+                                <a onclick="openForm('@item.MACTDDH','@item.MATHANG.MAMATHANG','@item.SOLUONG')" style="color:blue;float: left;" href="#">Sửa </a>
+                                <h6 style="float: left;">|</h6>
+                                <a onclick="xoaCTDonHang('@item.MACTDDH')" style="color:blue;float: left;" href="#"> Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                    <!--Them-->
+                    <tr role="row" class="odd">
+                        <td class="sorting_1"> </td>
+                        <td> </td>
+                        <td> </td>
+                        @for (var i = 0; i < 1; i++)
+                        {
+                            int S = 0;
+                            foreach (var item in Model.CT_DONDATHANG)
+                            {
+                                if (item.SOLUONG.HasValue && item.DONGIA.HasValue)
+                                {
+                                    S += (int)item.SOLUONG * (int)item.DONGIA;
+                                }
+
+                            }
+                            <td style="color:black;">Tổng tiền: @S</td>
+                        }
+                        <td><a style="color:blue;float: left;" href="#" onclick="openFormForInsert()">Thêm món</a></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </form>
+
+</div>
+<div class="form-group" id="gichunguoiban">
+    @Html.LabelFor(model => model.GHICHUCUANGUOIBAN, "Ghi Chú Của Người Bán:", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-6">
+        @Html.EditorFor(model => model.GHICHUCUANGUOIBAN, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.GHICHUCUANGUOIBAN, "", new { @class = "text-danger" })
+    </div>
+</div>
+<h6 />
+<h6 />
+<div>
+    <button type="button" class="btn btn-success" onclick="SaveInfo(true)">Lưu</button>
+
+</div>
+   
+
+
+<!--FORM CHINH SUA-->
+<div class="form-popup" id="myForm">
+    <form class="form-container">
+        <h1 style="color:olivedrab !important">Chọn món ăn</h1>
+        <label for="psw"><b>Tên món</b></label>
+        <div>
+            <select class="ten-mon form-control" id="ten-mon-select">
+                @foreach (var item in @Model.GetAllNuocGiaiKhat_MonAn())
+                {
+                    <option value=@item.MAMATHANG>@item.TENMATHANG</option>
+                }
+            </select>
+        </div>
+        <input id="ma-ct" class="form-control" type="text" value="" hidden />
+        <div class="form-group col-md-12">
+            <label for="inputState">Số lượng:</label>
+            <input type="number" class="form-control" placeholder="Nhập số lượng" name="soluong" required value="1" id="so-luong-edit">
+        </div>
+
+
+        <!--<input type="password" placeholder="Enter Password" name="psw" required>-->
+
+        <button type="button" class="btn" onclick="editCTDonDatHang()" id="btn-sua">Sửa</button>
+        <button type="button" class="btn" onclick="themCTDonDatHang()" id="btn-them">Thêm</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+
+    </form>
+</div>
+
+
+<!--JS-->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+function openForm(maCTDDH,maMH,soLuong) {
+    document.getElementById("myForm").style.display = "block";
+    document.getElementById("main-form").className = "main-form-hide";
+     document.getElementById("main-form").style.display = "none";
+    console.log(maMH);
+    $('#ma-ct').val(maCTDDH).change();
+    $('#so-luong-edit').val(soLuong).change();
+    $("#ten-mon-select").val(maMH).change();
+    $('#btn-sua').show();
+    $('#btn-them').hide();
+}
+function openFormForInsert() {
+    document.getElementById("myForm").style.display = "block";
+    document.getElementById("main-form").className = "main-form-hide";
+    $('#btn-sua').hide();
+    $('#btn-them').show();
+}
+
+function themCTDonDatHang() {
+    const url = '../../api/CTDonDatHangApi?';
+    // The data we are going to send in our request
+    let params = {
+        maDon: '@Model.MADON',
+        maMatHang: $("#ten-mon-select").val(),
+        soLuong: $('#so-luong-edit').val(),
+    }
+
+    let query = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+    // The parameters we are gonna pass to the fetch function
+    let fetchData = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }
+
+    fetch(url + query, fetchData)
+    .then(function (res) {
+        // Handle response you get from the server
+        return res.json();
+    }).then(function (data) {
+        alert(data);
+        location.reload();
+    });
+}
+
+
+function editCTDonDatHang() {
+    const url = '../../api/CTDonDatHangApi?';
+    // The data we are going to send in our request
+    let params = {
+        maCTDDH: $('#ma-ct').val(),
+        maMatHang: $("#ten-mon-select").val(),
+        soLuong: $('#so-luong-edit').val(),
+    }
+
+    let query = Object.keys(params)
+             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+             .join('&');
+    // The parameters we are gonna pass to the fetch function
+    let fetchData = {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }
+
+    fetch(url + query, fetchData)
+    .then(function (res) {
+        // Handle response you get from the server
+        return res.json();
+    }).then(function (data) {
+        alert(data);
+        location.reload();
+    });
+    //closeForm();
+
+}
+function xoaCTDonHang(maCT){
+    var result= confirm("Bạn có chắc chắn muốn xóa mặt hàng này khỏi danh sách!");
+    if(result==false)
+        return;
+    else{
+        const url = '../../api/CTDonDatHangApi?';
+        // The data we are going to send in our request
+        let params = {
+            maCTDDH: maCT,
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+}
+
+function closeForm() {
+    document.getElementById("myForm").style.display = "none";
+    document.getElementById("main-form").className = "main-form";
+     document.getElementById("main-form").style.display = "block";
+}
+//Thay doi tinh trang
+$(document).ready(function () {
+    $("select.tinh-trang").change(function () {
+        var selectedTinhTrang = $(this).children("option:selected").val();
+        SaveInfo(false);
+    });
+});
+
+function SaveInfo(isAlert) {
+    const url = '../../api/DonDatHangApi?';
+    // The data we are going to send in our request
+    let params = {
+        maDon: '@Model.MADON',
+        tinhTrang: $("select.tinh-trang").children("option:selected").val(),
+        ghiChuNguoiBan: $('#GHICHUCUANGUOIBAN').val(),
+    }
+
+    let query = Object.keys(params)
+             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+             .join('&');
+    // The parameters we are gonna pass to the fetch function
+    let fetchData = {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }
+    fetch(url+query, fetchData)
+    .then(function (res) {
+        // Handle response you get from the server
+        return res.json();
+    }).then(function (data) {
+        if (isAlert == true) {
+            console.log(data);
+            alert(data);
+            location.reload();
+        }
+        else
+            console.log(data);
+    });
+}
+</script>
+
+
+<!--CSS-->
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.5;
+        position: static;
+    }
+
+    .main-form {
+        opacity: 1;
+        color: black !important;
+    }
+
+    #gichunguoiban .form-control {
+        height: calc(10em + .75rem + 2px) !important;
+    }
+
+    .form-control {
+        border: 1px solid black !important;
+    }
+
+    .main-form .table {
+        color: black !important;
+    }
+
+    .table th, .table td, .table thead th {
+        border: 1px solid black;
+    }
+
+    .btn-success {
+        color: #fff;
+        background-color: #008000 !important;
+        border-color: #008000 !important;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(30% - 25px);
+        left: calc(50% - 50px);
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 300px;
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>

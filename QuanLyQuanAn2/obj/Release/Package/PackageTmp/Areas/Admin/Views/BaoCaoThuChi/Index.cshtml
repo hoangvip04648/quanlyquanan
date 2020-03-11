@@ -1,0 +1,328 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div id="print-area" >
+    <div style="color:black;margin-left:5%" id="select-thang">
+        <h6>Chọn tháng muốn xem báo cáo</h6>
+        <input id="thang-bao-cao-edit" type="month" value="@(ViewBag.Nam)-@(ViewBag.Thang)" />
+        <button style="background-color:aliceblue" id="btn-xem-bao-cao-khac">Xem</button>
+        <!--In bao cao-->
+        <button id="btn-print" style="margin-left:1%;background:aliceblue;">In báo cáo</button>
+    </div>
+    <hr />
+    <br />
+    <h5 style="color:blue;width:70%;text-align:center">
+        <b>
+            Báo cáo doanh thu tháng @(ViewBag.Thang)/@(ViewBag.Nam)
+        </b>
+    </h5>
+    <br />
+    <div style="width:65%;color:black;">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <br />
+    <!--Bao cao thu-->
+    <div style="width:100%; color:black;margin-left:5%">
+        <h5 style="color:blue;margin-left:2%">
+            Tổng doanh thu tháng @(ViewBag.Thang)/@(ViewBag.Nam) :
+            <b>@(ViewBag.ThuBanHangTaiQuan + ViewBag.ThuBanHangTrenWeb + ViewBag.ThuKhac - (ViewBag.ChiKhac + ViewBag.ChiNhapNguyenLieu + ViewBag.ChiNhapDungCu + ViewBag.ChiNhapNuocGiaiKhat + ViewBag.ChiTraLuongNhanVien))VNĐ</b>
+        </h5>
+
+        <table style="width:80%">
+            <tbody>
+                <tr>
+                    <td style="vertical-align:top">
+                        <h6 style="margin-left:5%;">Báo cáo tổng thu</h6>
+                        <table style="border-style:groove; margin-left:5%; min-width:60%;min-height:185px">
+                            <thead>
+                                <tr>
+                                    <th>Nguồn thu</th>
+                                    <th>Số tiền(VNĐ)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Bán hàng tại quán</td>
+                                    <td>@ViewBag.ThuBanHangTaiQuan</td>
+                                </tr>
+                                <tr>
+                                    <td>Bán hàng qua web</td>
+                                    <td>@ViewBag.ThuBanHangTrenWeb</td>
+                                </tr>
+                                <tr>
+                                    <td>Khác</td>
+                                    <td>@ViewBag.ThuKhac</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Tổng</b></td>
+                                    <td><b>@(ViewBag.ThuBanHangTaiQuan + ViewBag.ThuBanHangTrenWeb + ViewBag.ThuKhac)</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td style="vertical-align:top">
+                        <h6>Báo cáo tổng chi</h6>
+                        <table style="border-style:groove;min-width:60%;">
+                            <thead>
+                                <tr>
+                                    <th>Nguồn chi</th>
+                                    <th>Số tiền(VNĐ)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Nhập nguyên liệu</td>
+                                    <td>@ViewBag.ChiNhapNguyenLieu</td>
+                                </tr>
+                                <tr>
+                                    <td>Nhập dụng cụ</td>
+                                    <td>@ViewBag.ChiNhapDungCu</td>
+                                </tr>
+                                <tr>
+                                    <td>Nhập nước giải khát</td>
+                                    <td>@ViewBag.ChiNhapNuocGiaiKhat</td>
+                                </tr>
+                                <tr>
+                                    <td>Trả lương nhân viên</td>
+                                    <td>@ViewBag.ChiTraLuongNhanVien</td>
+                                </tr>
+                                <tr>
+                                    <td>Khác</td>
+                                    <td>@ViewBag.ChiKhac</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Tổng</b></td>
+                                    <td><b>@(ViewBag.ChiKhac+ ViewBag.ChiNhapNguyenLieu+ ViewBag.ChiNhapDungCu+ ViewBag.ChiNhapNuocGiaiKhat+ ViewBag.ChiTraLuongNhanVien)</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr></tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!--Tao bieu do bao cao-->
+    <script src="~/Assets/admin/js/Chart.min.js"></script>
+    <script src="~/Assets/admin/js/utils.js"></script>
+    <script>
+    var DAYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+    var numDay = new Date().getDate();
+    var listDay = [];
+    for (var i = 1; i <= @ViewBag.SoNgayCanHienThi ; i++) {
+        listDay.push(i + '');
+    }
+    var config = {
+        type: 'line',
+        data: {
+            labels: listDay,
+            datasets: [{
+                label: 'Số tiền chi',
+                backgroundColor: window.chartColors.purple,
+                borderColor: window.chartColors.purple,
+                data: [
+                    @(ViewBag.BaoCaoChiThang.Count>=1?@ViewBag.BaoCaoChiThang[0]:0),
+					@(ViewBag.BaoCaoChiThang.Count>=2?@ViewBag.BaoCaoChiThang[1]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=3?@ViewBag.BaoCaoChiThang[2]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=4?@ViewBag.BaoCaoChiThang[3]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=5?@ViewBag.BaoCaoChiThang[4]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=6?@ViewBag.BaoCaoChiThang[5]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=7?@ViewBag.BaoCaoChiThang[6]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=8?@ViewBag.BaoCaoChiThang[7]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=9?@ViewBag.BaoCaoChiThang[8]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=10?@ViewBag.BaoCaoChiThang[9]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=11?@ViewBag.BaoCaoChiThang[10]:0),
+					@(ViewBag.BaoCaoChiThang.Count>=12?@ViewBag.BaoCaoChiThang[11]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=13?@ViewBag.BaoCaoChiThang[12]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=14?@ViewBag.BaoCaoChiThang[13]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=15?@ViewBag.BaoCaoChiThang[14]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=16?@ViewBag.BaoCaoChiThang[15]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=17?@ViewBag.BaoCaoChiThang[16]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=18?@ViewBag.BaoCaoChiThang[17]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=19?@ViewBag.BaoCaoChiThang[18]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=20?@ViewBag.BaoCaoChiThang[19]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=21?@ViewBag.BaoCaoChiThang[20]:0),
+					@(ViewBag.BaoCaoChiThang.Count>=22?@ViewBag.BaoCaoChiThang[21]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=23?@ViewBag.BaoCaoChiThang[22]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=24?@ViewBag.BaoCaoChiThang[23]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=25?@ViewBag.BaoCaoChiThang[24]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=26?@ViewBag.BaoCaoChiThang[25]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=27?@ViewBag.BaoCaoChiThang[26]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=28?@ViewBag.BaoCaoChiThang[27]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=29?@ViewBag.BaoCaoChiThang[28]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=30?@ViewBag.BaoCaoChiThang[29]:0),
+                    @(ViewBag.BaoCaoChiThang.Count>=31?@ViewBag.BaoCaoChiThang[30]:0),
+                ],
+                fill: false,
+            }, {
+                label: 'Số tiền thu',
+                fill: false,
+                backgroundColor: window.chartColors.blue,
+                borderColor: window.chartColors.blue,
+                data: [
+					@(ViewBag.BaoCaoThuThang.Count>=1?@ViewBag.BaoCaoThuThang[0]:0),
+					@(ViewBag.BaoCaoThuThang.Count>=2?@ViewBag.BaoCaoThuThang[1]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=3?@ViewBag.BaoCaoThuThang[2]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=4?@ViewBag.BaoCaoThuThang[3]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=5?@ViewBag.BaoCaoThuThang[4]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=6?@ViewBag.BaoCaoThuThang[5]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=7?@ViewBag.BaoCaoThuThang[6]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=8?@ViewBag.BaoCaoThuThang[7]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=9?@ViewBag.BaoCaoThuThang[8]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=10?@ViewBag.BaoCaoThuThang[9]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=11?@ViewBag.BaoCaoThuThang[10]:0),
+					@(ViewBag.BaoCaoThuThang.Count>=12?@ViewBag.BaoCaoThuThang[11]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=13?@ViewBag.BaoCaoThuThang[12]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=14?@ViewBag.BaoCaoThuThang[13]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=15?@ViewBag.BaoCaoThuThang[14]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=16?@ViewBag.BaoCaoThuThang[15]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=17?@ViewBag.BaoCaoThuThang[16]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=18?@ViewBag.BaoCaoThuThang[17]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=19?@ViewBag.BaoCaoThuThang[18]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=20?@ViewBag.BaoCaoThuThang[19]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=21?@ViewBag.BaoCaoThuThang[20]:0),
+					@(ViewBag.BaoCaoThuThang.Count>=22?@ViewBag.BaoCaoThuThang[21]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=23?@ViewBag.BaoCaoThuThang[22]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=24?@ViewBag.BaoCaoThuThang[23]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=25?@ViewBag.BaoCaoThuThang[24]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=26?@ViewBag.BaoCaoThuThang[25]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=27?@ViewBag.BaoCaoThuThang[26]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=28?@ViewBag.BaoCaoThuThang[27]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=29?@ViewBag.BaoCaoThuThang[28]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=30?@ViewBag.BaoCaoThuThang[29]:0),
+                    @(ViewBag.BaoCaoThuThang.Count>=31?@ViewBag.BaoCaoThuThang[30]:0),
+                ],
+            },{
+                label: 'Doanh thu',
+                fill: false,
+                backgroundColor: 'rgb(255, 0, 33)',
+                borderColor: 'rgb(255, 0, 33)',
+                data: [
+					@(ViewBag.BaoCaoDoanhThuThang.Count>=1?@ViewBag.BaoCaoDoanhThuThang[0]:0),
+					@(ViewBag.BaoCaoDoanhThuThang.Count>=2?@ViewBag.BaoCaoDoanhThuThang[1]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=3?@ViewBag.BaoCaoDoanhThuThang[2]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=4?@ViewBag.BaoCaoDoanhThuThang[3]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=5?@ViewBag.BaoCaoDoanhThuThang[4]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=6?@ViewBag.BaoCaoDoanhThuThang[5]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=7?@ViewBag.BaoCaoDoanhThuThang[6]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=8?@ViewBag.BaoCaoDoanhThuThang[7]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=9?@ViewBag.BaoCaoDoanhThuThang[8]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=10?@ViewBag.BaoCaoDoanhThuThang[9]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=11?@ViewBag.BaoCaoDoanhThuThang[10]:0),
+					@(ViewBag.BaoCaoDoanhThuThang.Count>=12?@ViewBag.BaoCaoDoanhThuThang[11]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=13?@ViewBag.BaoCaoDoanhThuThang[12]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=14?@ViewBag.BaoCaoDoanhThuThang[13]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=15?@ViewBag.BaoCaoDoanhThuThang[14]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=16?@ViewBag.BaoCaoDoanhThuThang[15]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=17?@ViewBag.BaoCaoDoanhThuThang[16]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=18?@ViewBag.BaoCaoDoanhThuThang[17]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=19?@ViewBag.BaoCaoDoanhThuThang[18]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=20?@ViewBag.BaoCaoDoanhThuThang[19]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=21?@ViewBag.BaoCaoDoanhThuThang[20]:0),
+					@(ViewBag.BaoCaoDoanhThuThang.Count>=22?@ViewBag.BaoCaoDoanhThuThang[21]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=23?@ViewBag.BaoCaoDoanhThuThang[22]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=24?@ViewBag.BaoCaoDoanhThuThang[23]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=25?@ViewBag.BaoCaoDoanhThuThang[24]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=26?@ViewBag.BaoCaoDoanhThuThang[25]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=27?@ViewBag.BaoCaoDoanhThuThang[26]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=28?@ViewBag.BaoCaoDoanhThuThang[27]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=29?@ViewBag.BaoCaoDoanhThuThang[28]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=30?@ViewBag.BaoCaoDoanhThuThang[29]:0),
+                    @(ViewBag.BaoCaoDoanhThuThang.Count>=31?@ViewBag.BaoCaoDoanhThuThang[30]:0),
+                ],
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Biểu đồ báo cáo thu-chi tháng @ViewBag.Thang / @ViewBag.nam'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Ngày'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Số tiền (VNĐ)'
+                    }
+                }]
+            }
+        }
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myLine = new Chart(ctx, config);
+
+
+    };
+
+
+    var colorNames = Object.keys(window.chartColors);
+
+
+
+    </script>
+
+</div>
+<br>
+<br>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    document.getElementById("btn-print").addEventListener("click", function() {
+        var accordionSidebar=document.getElementById("accordionSidebar");
+        var printButton = document.getElementById("btn-print");
+        var selectThangInput = document.getElementById("select-thang");
+        printButton.style.visibility = 'hidden';
+        accordionSidebar.style.visibility = 'hidden';
+        selectThangInput.style.visibility= 'hidden';
+        window.print();
+        printButton.style.visibility = 'visible';
+        accordionSidebar.style.visibility = 'visible';
+        selectThangInput.style.visibility = 'visible';
+    });
+    document.getElementById("btn-xem-bao-cao-khac").addEventListener("click", function() {
+        var thangBC=$("#thang-bao-cao-edit").val();
+        location.href="./BaoCaoThuChi?thang="+thangBC.split('-')[1]+"&nam="+thangBC.split('-')[0];
+    });
+</script>
+
+<br>
+<br>
+
+
+   
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+
+
+

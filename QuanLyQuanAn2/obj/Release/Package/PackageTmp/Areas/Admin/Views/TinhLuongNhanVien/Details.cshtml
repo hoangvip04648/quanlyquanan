@@ -1,0 +1,290 @@
+﻿@model Models.Framework.NHANVIEN
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card shadow mb-4" id="main-form" style="color:black">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Lịch sử chấm công nhân viên</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div id="dataTable_filter" class="dataTables_filter">
+                            <label>Mã nhân viên: @Model.MANHANVIEN</label>
+                            <div>
+                                <label>Họ tên: @Model.ACCOUNT.HOTEN</label>
+                            </div>
+                            <div>
+                                <label>SĐT: @Model.ACCOUNT.SDT</label>
+                            </div>
+                            <div>
+                                <label>Lương: @Model.LUONG</label>
+                            </div>
+                            <div>
+                                <label>
+                                    Chọn trạng thái thanh toán:
+                                    <select onchange="goto('@Model.MANHANVIEN')" id="trang-thai-select" class="chon-trang-thai">
+                                        <option value="0" @(Model.trangThaiThanhToan == "0" ? "selected" : "")>Chưa thanh toán</option>
+                                        <option value="1" @(Model.trangThaiThanhToan == "1" ? "selected" : "")>Đã thanh toán</option>
+                                    </select>
+                                </label>
+                            </div>
+                            
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;color:black">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: auto;">Mã nhân viên</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: auto;">Ngày</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Thời gian làm</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Đơn vị</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Trạng thái</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.CHAMCONGNHANVIENs)
+                                {
+                                    if (item.TRANGTHAITHANHTOAN.Value == (Model.trangThaiThanhToan=="1"?true:false))
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1">@item.MANHANVIEN</td>
+                                            <td>@item.NGAYCHAMCONG.ToString("dd/MM/yyyy")</td>
+                                            <td>@item.THOIGIANLAM</td>
+                                            <td>@Model.DONVITINHLUONG.TENDONVITINHLUONG</td>
+                                            <td>@(item.TRANGTHAITHANHTOAN.Value.ToString()=="True"?"Đã thanh toán":"Chưa thanh toán")</td>
+                                            
+                                            <td><a onclick="openForm('@item.NGAYCHAMCONG.ToString("dd/MM/yyyy")',@item.THOIGIANLAM)" href="#" @(item.TRANGTHAITHANHTOAN.Value.ToString()=="True"?"hidden":"")>Sửa</a></td>
+
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                    <th rowspan="1" colspan="1"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                            <ul class="pagination">
+                                <li class="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Đầu</a></li>
+                                <li class="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+                                <li class="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Cuối(1)</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--INSERT FORM-->
+<div class="form-popup" id="edit-form" style="color:black">
+    <form class="form-container">
+        <h1 style="text-align:center">Sửa chấm công nhân viên</h1>
+        <label for="abc"><b>Mã nhân viên: </b>@Model.MANHANVIEN</label>
+        
+        <label for="abc"><b>Họ tên: </b> @Model.ACCOUNT.HOTEN</label>
+        
+        <div style="margin-top:6px">
+            <label for="abc"><b>Ngày làm</b></label>
+            <input id="ngay-lam-edit" placeholder="" name="" disabled value="">
+        </div>
+        
+        
+
+        <label for="abc" style="margin-top:10px">
+            <b>Thời gian làm</b>
+            <input id="thoi-gian-lam-edit" type="number" placeholder="Nhập thời gian làm" name="" style="width:60px" min="0">
+            @Model.DONVITINHLUONG.TENDONVITINHLUONG
+        </label>
+        
+        <h1> </h1>
+        <h1> </h1>
+
+        <button type="button" class="btn" onclick="suaChamCong()" id="btn-sua">Sửa</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+
+    </form>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    function goto(maNV) {
+        window.location.href = "./Details?maNhanVien=" + maNV + "&trangThaiThanhToan=" + $('#trang-thai-select').val();
+        console.log('aa');
+    }
+
+    function openForm(ngayChamCong, thoiGianLam) {
+        document.getElementById("main-form").style.display = "none";
+        document.getElementById("edit-form").style.display = "block";
+        document.getElementById("main-form").className = "main-form-hide";
+        $('#ngay-lam-edit').val(ngayChamCong).change();
+        $('#thoi-gian-lam-edit').val(thoiGianLam).change();
+    }
+    function closeForm() {
+        document.getElementById("main-form").style.display = "block";
+        document.getElementById("edit-form").style.display = "none";
+        document.getElementById("main-form").className = "main-form";
+    }
+
+    function suaChamCong() {
+       
+        const url = '../../api/ChamCongNhanVienApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            maNhanVien: '@Model.MANHANVIEN',
+            ngayChamCong: $('#ngay-lam-edit').val(),
+            thoiGianLam: $('#thoi-gian-lam-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+
+    $(document).ready(function () {
+        $("#ngay-sinh-edit").val('1980-01-01').change();
+        var dayStr = new Date().getUTCFullYear()+'-';
+        if (new Date().getUTCMonth() < 10)
+            dayStr += '0' + (new Date().getUTCMonth()+1);
+        else
+            dayStr += (new Date().getUTCMonth()+1);
+        if (new Date().getUTCDate() < 10)
+            dayStr += '-0' + new Date().getUTCDate();
+        else
+            dayStr += '-'+new Date().getUTCDate();
+        $("#ngay-ky-hop-dong-edit").val(dayStr).change();
+    });
+</script>
+
+
+
+
+<style>
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.2;
+        position: fixed;
+    }
+
+    .main-form {
+        opacity: 1;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(30% - 25px);
+        left: calc(50% - 50px);
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 300px;
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>

@@ -1,0 +1,10 @@
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\bin\Release\Models.dll.config
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\bin\Release\Models.dll
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\bin\Release\Models.pdb
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\bin\Release\EntityFramework.dll
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\bin\Release\EntityFramework.SqlServer.dll
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\bin\Release\EntityFramework.xml
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\bin\Release\EntityFramework.SqlServer.xml
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\obj\Release\Models.csprojResolveAssemblyReference.cache
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\obj\Release\Models.dll
+E:\HocTap\HK5\OODA\DoAn\WebQuanLyQuanAnASP\QuanLyQuanAn\Models\obj\Release\Models.pdb

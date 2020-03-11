@@ -1,0 +1,62 @@
+﻿@model Models.Framework.KHACHHANG
+
+@{
+    ViewBag.Title = "Index";
+    if (ViewBag.IsKhachHangDaDangNhap)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutChuaLogin.cshtml";
+    }
+
+}
+<div style="width:90%; text-align:center;margin-left:5%">
+    <div class="hero-wrap hero-bread" style="background-image: url(/Assets/khachhang/image/anh-nen-info.png); width:100%;height:40px;text-align:center;display: inline-block"></div>
+</div>
+<div style="width:90%;margin-left:5%; color:black">
+    <h2 style="margin-left:3%;color:green;text-align:center">Thông tin cá nhân</h2>
+    <hr />
+    <table style="width:100%">
+        <tbody>
+            <tr>
+                <td>
+                    <ul style="list-style-type:none;">
+                        <li>ID: @Model.MAKHACHHANG</li>
+                        <li>Họ tên: @Model.ACCOUNT.HOTEN</li>
+                        <li>Giới tính: @Model.ACCOUNT.GIOITINH</li>
+                        <li>Ngày sinh: @Model.ACCOUNT.NGAYSINH.Value.ToString("dd/MM/yyyy")</li>
+                        <li></li>
+                    </ul>  
+                </td>
+                <td>
+                    <ul style="list-style-type:none;">
+                        <li>SĐT: @Model.ACCOUNT.SDT</li>
+                        <li>Tài khoản: @Model.ACCOUNT.TAIKHOAN</li>
+                        <li>Địa chỉ: @Model.ACCOUNT.DIACHI</li>
+                        <li>Địa chỉ nhận hàng: @Model.DIACHINHANHANG</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </tbody>
+    </table>
+    <div style="margin-left:3%">
+        <button style="background-color:lightgreen;border-color:darkseagreen;" onclick="GoToEditInfo()">Sửa thông tin</button>
+        <button style="background-color:lightgreen;border-color:darkseagreen;" onclick="GoToDoiMK()">Đổi mật khẩu</button>
+    </div>
+    
+    <hr />
+    <hr />
+</div>
+<script>
+    function GoToEditInfo(){
+        location.href = "@Url.Action("Edit", "ThongTinCaNhan")";
+    }
+    function GoToDoiMK() {
+        location.href = "@Url.Action("EditPassword", "ThongTinCaNhan")";
+    }
+</script>
+

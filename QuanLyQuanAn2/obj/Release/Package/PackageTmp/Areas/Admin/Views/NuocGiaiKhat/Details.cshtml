@@ -1,0 +1,349 @@
+﻿@model Models.Framework.NUOCGIAIKHAT
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-form" id="main-form">
+    <div class="card shadow mb-4" >
+        <div class="card-header py-3" style="background-color:white;color:black">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h6>Mã nước giải khát:</h6>
+                        </td>
+                        <td>
+                            <h6>@Model.MANUOCGIAIKHAT </h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h6>Tên nước giải khát: </h6>
+                        </td>
+                        <td>
+                            <h6><input value="@Model.MATHANG.TENMATHANG" id="ten-nuoc-giai-khat" /></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Đơn vị: 
+                        </td>
+                        <td>
+                            <select class="don-vi" size="1" style="overflow-y:scroll;margin-bottom:10px">
+                                @foreach (var donvi in Model.MATHANG.GetAllDonViTinh())
+                                {
+                                    <option value='@donvi.MADONVITINH' @(Model.MATHANG.MADONVITINH == donvi.MADONVITINH ? "selected" : "")>@donvi.TENDONVITINH</option>
+                                }
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h6>Giá bán: </h6>
+                        </td>
+                        <td>
+                            <h6><input value="@Model.GIABAN" id="gia-ban" type="number" min="0"/></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h6>Số lượng còn: </h6>
+                        </td>
+                        <td>
+                            <h6><input value="@Model.SOLUONGCON" id="so-luong-con" type="number" min="0"/></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h6>Hình ảnh: </h6>
+                        </td>
+                        <td>
+                            <h6><input value="@Model.HINHANH" id="hinh-anh" /> <img src="@Model.HINHANH" style="width:30px;height:30px;" /></h6>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            
+            
+            
+            
+            <h6 />
+            <h6 />
+            <div>
+                <h6>Nhà cung cấp:</h6>
+                <table class="table table-bordered dataTable" id="dataTable" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="color:black">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Mã nhà cung cấp</th>
+                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Tên nhà cung cấp</th>
+                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Người đại diện</th>
+                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Số điện thoại</th>
+                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Địa chỉ</th>
+                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: auto;">Mô tả</th>
+                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{Model.MATHANG.GetNhaCungCap(); }
+                        @foreach (var item in Model.MATHANG.NHACUNGCAPs)
+                        {
+                            <tr role="row" class="odd">
+                                <td class="sorting_1">@item.MANHACUNGCAP</td>
+                                <td>@(item.TENNHACUNGCAP)</td>
+                                <td>@(item.NGUOIDAIDIEN)</td>
+                                <td>@(item.SODIENTHOAI)</td>
+                                <td>@(item.DIACHI)</td>
+                                <td>@(item.MOTA)</td>
+                                <td>
+                                    <a onclick="xoaNhaCungCap('@item.MANHACUNGCAP')" style="color:blue;float: left;" href="#"> Xóa</a>
+                                <td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr role="row">
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+                            <th><a onclick="openForm()" style="color:blue;float: left;" href="#">Thêm</a></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <h6 />
+    <h6 />
+    <div>
+        <button type="button" onclick="SaveInfo()">Lưu</button>
+    </div>
+</div>
+
+<!--FORM THEM-->
+<div class="form-popup" id="edit-form">
+    <form class="form-container">
+        <h1>Chọn nhà cung cấp</h1>
+        <label for="psw"><b>Tên</b></label>
+        <div>
+            <select class="chon-nha-cung-cap" id="nha-cung-cap-select">
+                @foreach (var item in @Model.MATHANG.GetAllNhaCungCap())
+                {
+                    <option value=@item.MANHACUNGCAP>@item.TENNHACUNGCAP</option>
+                }
+            </select>
+        </div>
+        <h1> </h1>
+        <h1> </h1>
+
+        <button type="button" class="btn" onclick="themNhaCungCap()" id="btn-them">Thêm</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+
+    </form>
+</div>
+
+
+<!--JS--------------------------------------------------------------------------------->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    function openForm() {
+        document.getElementById("edit-form").style.display = "block";
+        document.getElementById("main-form").className = "main-form-hide";
+        document.getElementById("main-form").style.display = "none";
+    }
+    function closeForm() {
+        document.getElementById("edit-form").style.display = "none";
+        document.getElementById("main-form").className = "main-form";
+        document.getElementById("main-form").style.display = "block";
+    }
+    function xoaNhaCungCap(maNCC) {
+        var result = confirm("Bạn có chắc chắn muốn xóa nhà cung cấp này khỏi danh sách?");
+        if (result == false)
+            return;
+        else {
+            const url = '../../api/NuocGiaiKhatApi?';
+            // The data we are going to send in our request
+            let params = {
+                maNuocGiaiKhat: '@Model.MANUOCGIAIKHAT',
+                maNhaCungCap: maNCC,
+            }
+
+            let query = Object.keys(params)
+                     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                     .join('&');
+            // The parameters we are gonna pass to the fetch function
+            let fetchData = {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            fetch(url + query, fetchData)
+            .then(function (res) {
+                // Handle response you get from the server
+                return res.json();
+            }).then(function (data) {
+                alert(data);
+                location.reload();
+            });
+        }
+    }
+    function themNhaCungCap() {
+        const url = '../../api/NuocGiaiKhatApi?';
+        // The data we are going to send in our request
+        let params = {
+            maNuocGiaiKhat: '@Model.MANUOCGIAIKHAT',
+            maNhaCungCap: $("select.chon-nha-cung-cap").children("option:selected").val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+    function SaveInfo() {
+        const url = '../../api/NuocGiaiKhatApi?';
+        // The data we are going to send in our request
+        let params = {
+            maNuocGiaiKhat: '@Model.MANUOCGIAIKHAT',
+            tenNuocGiaiKhat: $('#ten-nuoc-giai-khat').val(),
+            madonVi: $("select.don-vi").children("option:selected").val(),
+            giaBan: $('#gia-ban').val(),
+            soLuongCon: $('#so-luong-con').val(),
+            hinhAnh:$('#hinh-anh').val(),
+        }
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+
+</script>
+
+
+
+
+<style>
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.5;
+        position: fixed;
+    }
+
+    .main-form {
+        opacity: 1;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(30% - 25px);
+        left: calc(50% - 50px);
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 300px;
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>
+
+

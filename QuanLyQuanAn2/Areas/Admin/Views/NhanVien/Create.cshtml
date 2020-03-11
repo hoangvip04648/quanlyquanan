@@ -1,0 +1,137 @@
+﻿@model Models.Framework.NHANVIEN
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!--INSERT FORM-->
+<div class="form-popup" id="edit-form">
+    <form class="form-container">
+        <h1>Chi tiết món ăn</h1>
+        <label for="abc"><b>Tài khoản</b></label>
+        <input id="tai-khoan-edit" type="number" placeholder="Nhập tài khoản" name="taikhoan" required>
+        <label for="abc"><b>Mật khẩu</b></label>
+        <input id="mat-khau-edit" type="password" placeholder="Nhập mật khẩu" name="matkhau" required>
+        <label for="abc"><b>Nhập lại mật khẩu</b></label>
+        <input id="re-mat-khau-edit" type="password" placeholder="Nhập lại mật khẩu" name="rematkhau" required>
+        <label for="abc"><b>Họ tên</b></label>
+        <input id="ho-ten-edit" type="text" placeholder="Nhập họ tên" name="hoten" required>
+        <label for="abc"><b>Ngày sinh</b></label>
+        <input id="ngay-sinh-edit" type="date" placeholder="Nhập ngày sinh" name="" required>
+        <label for="abc"><b>Giới tính</b></label>
+        <select class="chon-gioi-tinh" id="gioi-tinh-select" >
+            <option value="1">Nam</option>
+            <option value="0">Nữ</option>
+        </select>
+        <label for="abc"><b>SĐT</b></label>
+        <input id="sdt-edit" type="number" placeholder="Nhập số điện thoại" name="" required>
+        <label for="abc"><b>Địa chỉ</b></label>
+        <input id="dia-chi-edit" type="text" placeholder="Nhập địa chỉ" name="" required>
+        <label for="abc"><b>Lương</b></label>
+        <input id="luong-edit" type="number" placeholder="Nhập lương" name="" required>
+        <label for="abc"><b>Đơn vị tính lương</b></label>
+        <div>
+            <select class="chon-don-vi-tinh-luong" id="don-vi-tinh-luong-select">
+                @foreach (var item in @Models.Framework.DONVITINHLUONG.GetAll())
+                {
+                    <option value=@item.MADONVITINHLUONG>@item.TENDONVITINHLUONG</option>
+                }
+            </select>
+        </div>
+        <label for="abc"><b>Ngày ký hợp đồng</b></label>
+        <input id="ngay-ky-hop-dong-edit" type="date" placeholder="Nhập ngày ký hợp đồng" name="" required>
+
+        <h1> </h1>
+        <h1> </h1>
+
+        <button type="button" class="btn" onclick="themNguyenLieu()" id="btn-them">Thêm</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+
+    </form>
+</div>
+
+<div>
+    @Html.ActionLink("Quay về", "Index")
+</div>
+
+
+
+<style>
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.5;
+        position: fixed;
+    }
+
+    .main-form {
+        opacity: 1;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(30% - 25px);
+        left: calc(50% - 50px);
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 300px;
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>

@@ -1,0 +1,164 @@
+﻿@model List<Models.Framework.DONDATHANG>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Quản lý Đơn đặt hàng</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter">
+                            <label>Tìm kiếm:<input id="tim-kiem-edit" type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable" value="@ViewBag.Query"></label>
+                                                        <input id="ngay-edit" type="date" value="@ViewBag.Nam-@ViewBag.Thang-@ViewBag.Ngay" />
+                                                        <button onclick="XemDonDatHang()">Xem</button>
+                        </div>
+                            
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;color:black">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: auto;">Mã đơn</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: auto;">Ngày</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: auto;">Thời gian</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Khách hàng</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">SĐT</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Số lượng</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Tổng tiền</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: auto;">Địa chỉ giao hàng</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: auto;">Ghi chú</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: auto;">Tình trạng</th> 
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending"></th>                                                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">@item.MADON</td>
+                                        <td>@(item.NGAY.HasValue? @item.NGAY.Value.ToString("dd/MM/yyyy"):"")</td>
+                                        <td>@(item.THOIGIAN+"s")</td>
+                                        <td>@item.KHACHHANG.ACCOUNT.HOTEN</td>
+                                        <td>@item.KHACHHANG.ACCOUNT.SDT</td>
+                                        <td>@item.GetSoLuongMatHangDaDat()</td>
+                                        <td>@item.GetTongTien()</td>
+                                        <td>@item.DIACHIGIAOHANG</td>
+                                        <td>@item.GHICHU</td>
+                                        <td>@(item.TINHTRANGDONHANG.Value==0?"Chưa xác nhận":(item.TINHTRANGDONHANG.Value == 1?"Đã xác nhận":(item.TINHTRANGDONHANG.Value == 2 ?"Đã giao":"Đã hủy")))</td>
+                                        <td>@Html.ActionLink("Chi tiết", "Details", new { maDon = @item.MADON.ToString().Trim() })</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <!--
+                            <tfoot>
+                                <tr>
+                                    <th rowspan="1" colspan="1">Mã đơn</th>
+                                    <th rowspan="1" colspan="1">Ngày</th>
+                                    <th rowspan="1" colspan="1">Thời gian</th>
+                                    <th rowspan="1" colspan="1">Mã khách hàng</th>
+                                    <th rowspan="1" colspan="1">Địa chỉ giao hàng</th>
+                                    <th rowspan="1" colspan="1">Ghi chú</th>
+                                    <th rowspan="1" colspan="1">Tình trạng</th>
+                                    <th rowspan="1" colspan="1">Ghi chú người bán</th>
+                                </tr>
+                            </tfoot>
+                            -->
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                            <ul class="pagination">
+                                <li class="paginate_button page-item previous " id="dataTable_previous"><a href="@Url.Action("Index","DonDatHang",new {id=1,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Đầu</a></li>
+
+                                @if (ViewBag.CurrentPage - 2 == 1)
+                                {
+                                    <li class="paginate_button page-item previous " id="dataTable_previous"><a href="@Url.Action("Index","DonDatHang",new {id=1,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">1</a></li>
+
+                                }
+                                else if (ViewBag.CurrentPage - 2 > 1)
+                                {
+                                    <li><a style="color:black">...</a></li>
+                                    <li class="paginate_button page-item previous " id="dataTable_previous"><a href="@Url.Action("Index","DonDatHang",new {id=ViewBag.CurrentPage - 2,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">@(ViewBag.CurrentPage - 2)</a></li>
+
+                                }
+                                @if (ViewBag.CurrentPage - 1 >= 1)
+                                {
+                                    <li class="paginate_button page-item previous " id="dataTable_previous">
+                                        <a href="@Url.Action("Index","DonDatHang",new {id=ViewBag.CurrentPage - 1,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                            @(ViewBag.CurrentPage - 1)
+                                        </a>
+                                    </li>
+
+                                }
+                                <li class="paginate_button page-item previous active" id="dataTable_previous">
+                                    <a href="@Url.Action("Index","DonDatHang",new {id=ViewBag.CurrentPage,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                        @(ViewBag.CurrentPage)
+                                    </a>
+                                </li>
+
+                                @if (ViewBag.CurrentPage + 1 <= ViewBag.SoLuongPage)
+                                {
+                                    <li class="paginate_button page-item previous " id="dataTable_previous">
+                                        <a href="@Url.Action("Index","DonDatHang",new {id=ViewBag.CurrentPage + 1,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                            @(ViewBag.CurrentPage + 1)
+                                        </a>
+                                    </li>
+                                }
+                                @if (ViewBag.CurrentPage + 2 == ViewBag.SoLuongPage)
+                                {
+                                    <li class="paginate_button page-item previous " id="dataTable_previous">
+                                        <a href="@Url.Action("Index","DonDatHang",new {id=ViewBag.SoLuongPage,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                            @ViewBag.SoLuongPage
+                                        </a>
+                                    </li>
+                                }
+                                else if (ViewBag.CurrentPage + 2 < ViewBag.SoLuongPage)
+                                {
+                                    <li class="paginate_button page-item previous " id="dataTable_previous">
+                                        <a href="@Url.Action("Index","DonDatHang",new {id=ViewBag.CurrentPage + 2,ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                            @(ViewBag.CurrentPage + 2)
+                                        </a>
+                                    </li>
+                                    <li><a style="color:black">...</a></li>
+
+                                }
+                                <li class="paginate_button page-item previous " id="dataTable_previous">
+                                    <a href="@Url.Action("Index","DonDatHang",new {id=(ViewBag.SoLuongPage),ngay=ViewBag.Ngay,thang=ViewBag.Thang,nam=ViewBag.Nam,q=ViewBag.Query})" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                        Cuối(@(ViewBag.SoLuongPage))
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function XemDonDatHang() {
+        var query = $('#tim-kiem-edit').val();
+        var dateEdit = $('#ngay-edit').val();
+        var ngay = dateEdit.split('-')[2];
+        var thang = dateEdit.split('-')[1];
+        var nam = dateEdit.split('-')[0];
+        location.href = "./1?ngay=" + ngay + "&thang=" + thang + "&nam=" + nam+"&q="+query;
+    }
+
+
+</script>

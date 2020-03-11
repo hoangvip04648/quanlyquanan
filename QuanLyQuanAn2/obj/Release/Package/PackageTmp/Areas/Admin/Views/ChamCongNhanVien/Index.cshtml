@@ -1,0 +1,248 @@
+﻿@model IEnumerable<Models.Framework.CHAMCONGNHANVIEN>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-form" id="main-form">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Chấm công nhân viên</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;color:black;">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: auto;">Mã nhân viên</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: auto;">Họ tên</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: auto;">Lương</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Đơn vị tính lương</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Hôm nay</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Lịch sử chấm công</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Models.Framework.NHANVIEN.GetAllConHoatDong())
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1">@item.MANHANVIEN</td>
+                                            <td>@item.ACCOUNT.HOTEN</td>
+                                            <td>@item.LUONG</td>
+                                            <td>@item.DONVITINHLUONG.TENDONVITINHLUONG</td>
+                                            <td>@item.GetTrangThaiThanhToanLuongHomNay()</td>
+                                            <td><a href="@Url.Action("Details","TinhLuongNhanVien", new {maNhanVien=@item.MANHANVIEN,trangThaiThanhToan=0 })">Xem thêm</a></td>
+                                            <td>
+                                                <a onclick="openForm('@item.MANHANVIEN','@item.ACCOUNT.HOTEN','@item.DONVITINHLUONG.TENDONVITINHLUONG')" style="color:blue;float: left;" href="#">Chấm công</a>
+                                                
+                                            <td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <!--THEM-->
+                                <tfoot>
+                                    <tr>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                <ul class="pagination">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--FORM THEM-->
+<div class="form-popup" id="edit-form" style="color:black">
+    <form class="form-container">
+        <h1>Chấm công</h1>
+        
+        <label for="psw"><b>Mã nhân viên</b></label>
+        <input id="ma-nhan-vien-edit" type="text" placeholder="" value="" disabled>
+        <label for="psw"><b>Họ tên</b></label>
+        <input id="ho-ten-edit" type="text" placeholder="" value="" disabled>
+
+        <div>
+            <label for="psw"><b>Ngày chấm công</b></label>
+            <input id="ngay-cham-cong-edit" type="date" placeholder="" value="">
+        </div>
+        
+        <div style="margin-top:15px">
+            <label for="psw"><b>Số công</b></label>
+            <input id="so-cong-edit" type="number" min="0" placeholder="" value="0" style="width:60px">
+            <input id="don-vi-tinh-luong-edit" placeholder="" value="" disabled style="width:40px">
+        </div>
+        
+        
+        
+        <h6 style="height:10px"></h6>
+        <button type="button" class="btn" onclick="chamCong()" id="btn-them">Ghi công</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    function openForm(maNV, hoTen,donViTinhLuong) {
+        document.getElementById("edit-form").style.display = "block";
+        document.getElementById("main-form").className = "main-form-hide";
+        document.getElementById("main-form").style.display = "none";
+        $('#ma-nhan-vien-edit').val(maNV).change();
+        $('#ho-ten-edit').val(hoTen).change();
+        var dayNow = new Date().getFullYear();
+        if (new Date().getMonth() < 10)
+            dayNow += "-0" + (new Date().getMonth()+1);
+        else
+            dayNow += "-" + (new Date().getMonth()+1);
+        if (new Date().getDate() < 10)
+            dayNow += "-0" + new Date().getDate();
+        else
+            dayNow += "-" + new Date().getDate();
+        console.log(dayNow);
+        $('#ngay-cham-cong-edit').val(dayNow).change();
+        $('#so-cong-edit').val(0).change();
+        $('#don-vi-tinh-luong-edit').val(donViTinhLuong).change();
+    }
+    function closeForm() {
+        document.getElementById("edit-form").style.display = "none";
+        document.getElementById("main-form").className = "main-form";
+        document.getElementById("main-form").style.display = "block";
+    }
+
+    function chamCong() {
+        const url = '../../api/ChamCongNhanVienApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            maNV: $('#ma-nhan-vien-edit').val(),
+            ngayCham: $("#ngay-cham-cong-edit").val(),
+            thoiGianLam: $('#so-cong-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+</script>
+
+
+<style>
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.5;
+        position: fixed;
+    }
+
+    .main-form {
+        opacity: 1;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(15% - 25px);
+        left: calc(45% - 50px);
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 340px;
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>

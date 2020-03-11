@@ -1,0 +1,331 @@
+﻿@model IEnumerable<Models.Framework.MENUNUOCGIAIKHAT>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-form" id="main-form">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Quản lý Menu nước giải khát</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div id="dataTable_filter" class="dataTables_filter">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;color:black">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: auto;">Mã nước giải khát</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: auto;">Tên nước giải khát</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: auto;">Giá bán</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: auto;">Số lượng còn</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1">@item.MANUOCGIAIKHAT</td>
+                                            <td>@item.NUOCGIAIKHAT.MATHANG.TENMATHANG</td>
+                                            <td>@item.NUOCGIAIKHAT.GIABAN</td>
+                                            <td>@item.NUOCGIAIKHAT.SOLUONGCON</td>
+                                            <td>
+                                                <a onclick="openFormForEdit('@item.MANUOCGIAIKHAT',@item.NUOCGIAIKHAT.SOLUONGCON,@(item.NUOCGIAIKHAT.GIABAN))" style="color:blue;float: left;" href="#">Sửa</a>
+                                                <h6 style="float: left;">|</h6>
+                                                <a onclick="xoaMenuNuocGiaiKhat('@item.MANUOCGIAIKHAT')" style="color:blue;float: left;" href="#"> Xóa</a>
+                                            <td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <!--THEM-->
+                                <tfoot>
+                                    <tr>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"> </th>
+                                        <th rowspan="1" colspan="1"><a style="color:blue;float: left;" href="#" onclick="openFormForInsert()">Thêm</a></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                <ul class="pagination">
+  
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--FORM THEM-->
+<div class="form-popup" id="edit-form" style="color:black">
+    <form class="form-container">
+        <h2 style="text-align:center">Menu nước giải khát</h2>
+        
+        <div>
+            <label for="psw"><b>Tên nước</b></label>
+            <select class="chon-nuoc-giai-khat" id="nuoc-giai-khat-select" style="width: 73%;;margin-bottom:15px">
+                @foreach (var item in @Models.Framework.NUOCGIAIKHAT.GetAllNuocGiaiKhat())
+                {
+                    <option value=@item.MANUOCGIAIKHAT>@item.MATHANG.TENMATHANG</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="psw" id="so-luong-con-lb"><b>Số lượng còn </b></label>
+            <input id="so-luong-con-edit" type="number" placeholder="Nhập số lượng còn" value="" style="width: 62%;">
+        </div>
+        <div>
+            <label for="psw" id="so-luong-con-lb"><b>Giá bán</b></label>
+            <input id="gia-ban-edit" type="number" placeholder="Nhập giá bán" value="" style="margin-left:10px;width:73%;margin-top:10px">
+
+        </div>
+        
+
+        <h6> </h6>
+        <h6 style="height:10px"></h6>
+        <button type="button" class="btn" onclick="themMenuNuocGiaiKhat()" id="btn-them">Thêm</button>
+        <button type="button" class="btn" onclick="suaMenuNuocGiaiKhat()" id="btn-sua">Sửa</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Thoát</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    function openFormForInsert() {
+        document.getElementById("edit-form").style.display = "block";
+        document.getElementById("main-form").className = "main-form-hide";
+        document.getElementById("main-form").style.display = "none";
+        $('#gia-ban-edit').val(10000).change();
+        $('#nuoc-giai-khat-select').removeAttr('disabled');
+        $('#btn-sua').hide();
+        $('#btn-them').show();
+        $('#so-luong-con-lb').hide();
+        $('#so-luong-con-edit').hide();
+    }
+    function openFormForEdit(maNuocGiaiKhat, soLuongCon, giaBan) {
+        document.getElementById("main-form").style.display = "none";
+        document.getElementById("edit-form").style.display = "block";
+        document.getElementById("main-form").className = "main-form-hide";
+        $('#nuoc-giai-khat-select').val(maNuocGiaiKhat).change();
+        $('#nuoc-giai-khat-select').attr('disabled', 'disabled');
+        $('#so-luong-con-edit').val(soLuongCon).change();
+        $('#gia-ban-edit').val(giaBan).change();
+        $('#btn-sua').show();
+        $('#btn-them').hide();
+        $('#so-luong-con-lb').show();
+        $('#so-luong-con-edit').show();
+    }
+    function closeForm() {
+        document.getElementById("edit-form").style.display = "none";
+        document.getElementById("main-form").className = "main-form";
+        document.getElementById("main-form").style.display = "block";
+    }
+
+    function themMenuNuocGiaiKhat() {
+        const url = '../../api/MenuNuocGiaiKhatApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            maNuocGiaiKhat: $("select.chon-nuoc-giai-khat").children("option:selected").val(),
+            giaBan: $('#gia-ban-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+    function suaMenuNuocGiaiKhat() {
+        const url = '../../api/MenuNuocGiaiKhatApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            maNuocGiaiKhat: $("select.chon-nuoc-giai-khat").children("option:selected").val(),
+            soLuongCon: $("#so-luong-con-edit").val(),
+            giaBan: $('#gia-ban-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+            location.reload();
+        });
+    }
+
+    function xoaMenuNuocGiaiKhat(maMA) {
+        var result = confirm("Bạn có chắc chắn muốn xóa nước giải khát này khỏi menu?");
+        if (result == false)
+            return;
+        else {
+            const url = '../../api/MenuNuocGiaiKhatApi?';
+            // The data we are going to send in our request
+            let params = {
+                //maNCC: $('#ma-ncc-edit').val(),
+                maNuocGiaiKhat: maMA,
+            }
+
+            let query = Object.keys(params)
+                     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                     .join('&');
+            // The parameters we are gonna pass to the fetch function
+            let fetchData = {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            fetch(url + query, fetchData)
+            .then(function (res) {
+                // Handle response you get from the server
+                return res.json();
+            }).then(function (data) {
+                alert(data);
+                location.reload();
+            });
+        }
+    }
+
+    
+</script>
+
+
+<style>
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .main-form-hide {
+        opacity: 0.5;
+        position: fixed;
+    }
+
+    .main-form {
+        opacity: 1;
+    }
+
+    .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: absolute;
+        top: calc(20% - 25px);
+        left: calc(50% - 50px);
+        border: 3px solid #f1f1f1;
+        z-index: 999;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 300px;
+        padding: 10px;
+        background-color: white;
+    }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+            /* When the inputs get focus, do something */
+            .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>
+
+
+
+

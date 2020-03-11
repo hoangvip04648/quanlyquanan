@@ -1,0 +1,760 @@
+﻿@model List<Models.Framework.DONGOIMON>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/NhanVien/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row" style="color:#005231">
+    <div class="column left">
+        <h2 style="color:lightseagreen">Memu</h2>
+        <p>Chọn món ăn</p>
+
+        <div class="container" style="width:100%">
+           
+            <div class="tab-head ">
+                <nav class="nav-sidebar">
+                    <ul class="nav tabs ">
+                        <li class="active"><a href="#tab1" data-toggle="tab" style="color:lightseagreen">Món ăn</a></li>
+                        <li class=""><a href="#tab2" data-toggle="tab" style="color:lightseagreen">Nước giải khát</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="tab-content tab-content-t ">
+                    <!--MENUMONAN-->
+                    <div class="tab-pane active text-style" id="tab1">
+                        <div class="con-w3l">
+                            @foreach (var item in Models.Framework.MENUMONAN.GetAll())
+                            {
+
+                                <div class="col-md-4 m-wthree" >
+                                    <div class="col-m" style="height:auto">
+                                        <div  style="padding-left:1px;">
+                                            <select id="trang-thai-select" class="chon-trang-thai" style="background-color:ghostwhite" onchange="thayDoiTrangThaiMonAn('@item.MAMONAN',this.value)">
+                                                <option value="1" @(item.TRANGTHAI.Value?"selected":"")>Còn</option>
+                                                <option value="0" @(!item.TRANGTHAI.Value?"selected":"")>Hết</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                                            
+                                            <img src="@item.MONAN.HINHANH" class="img-responsive" alt="" style="height:150px;width:100%">
+                                            @if (item.TRANGTHAI == false)
+                                            {
+                                                <div class="offer"><p><span>Hết</span></p></div>
+                                            }
+                                        </a>
+                                        <div class="mid-1">
+                                            <div>
+                                                
+                                                <h6><b>@item.MONAN.MATHANG.TENMATHANG</b></h6>
+                                            </div>
+                                            <div class="mid-2">
+                                                <p>
+                                                   @item.MONAN.GIABAN VNĐ
+                                                </p>
+                                                <div class="block">
+                                                    <div class="starbox small ghosting"> </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="add">
+                                                <button class="btn btn-danger my-cart-btn my-cart-b " data-id="1" 
+                                                        data-name="Moong" data-summary="summary 1" data-price="1.50" data-quantity="1" 
+                                                         @(item.TRANGTHAI.Value==false?"disabled":"")
+                                                        data-image="images/of.png" onclick="appendCT_DonGoiMon('@item.MAMONAN','@item.MONAN.MATHANG.TENMATHANG','@item.MONAN.GIABAN')">Thêm vào hóa đơn</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                    <!--MENUNUOCGIAIKHAT-->
+                    <div class="tab-pane  text-style" id="tab2">
+                        <div class="con-w3l">
+                            @foreach (var item in Models.MenuNuocGiaiKhatModel.ListAllDangBan())
+                            {
+
+                                <div class="col-md-4 m-wthree">
+                                    <div class="col-m" style="height:auto">
+                                        <div style="padding-left:5px;">
+                                            
+                                        </div>
+
+                                        <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+
+                                            <img src="@item.NUOCGIAIKHAT.HINHANH" class="img-responsive" alt="" style="height:150px;width:150px">
+                                            @if (item.NUOCGIAIKHAT.SOLUONGCON <= 0)
+                                            {
+                                                <div class="offer"><p><span>Hết</span></p></div>
+                                            }
+                                        </a>
+                                        <div class="mid-1">
+                                            <div>
+                                                <h6><b>@item.NUOCGIAIKHAT.MATHANG.TENMATHANG</b></h6>
+                                            </div>
+                                            <div class="mid-2">
+                                                <p>
+                                                    @item.NUOCGIAIKHAT.GIABAN VNĐ, còn @item.NUOCGIAIKHAT.SOLUONGCON chai
+                                                </p>
+                                                <div class="block">
+                                                    <div class="starbox small ghosting"> </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="add">
+                                                <button class="btn btn-danger my-cart-btn my-cart-b " data-id="1"
+                                                        data-name="Moong" data-summary="summary 1" data-price="1.50" data-quantity="1"
+                                                        @(item.NUOCGIAIKHAT.SOLUONGCON.Value <=0 ? "disabled" : "")
+                                                        data-image="images/of.png" onclick="appendCT_DonGoiMon('@item.MANUOCGIAIKHAT','@item.NUOCGIAIKHAT.MATHANG.TENMATHANG','@item.NUOCGIAIKHAT.GIABAN')">
+                                                    Thêm vào hóa đơn
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--LẬP HÓA ĐƠN-->
+    <div class="column middle">
+        <h2 style="color:lightseagreen">Lập hóa đơn</h2>
+        <p>Lập hóa đơn cho khách</p>
+        <div>
+            <hr/>
+            <p>----------</p>
+            <table id="table-ct-hoa-don">
+                
+            </table>
+            <hr/>
+            <p>----------</p>
+            <div>
+                <table>
+                    <tr>
+                        <td><hr>Bàn: </td>
+                        <td><hr><input id="ban-edit" type="text" style="width:75%" maxlength="4"/></td>
+                    </tr>
+                    <tr>
+                        <td><hr>Phí khác: </td>
+                        <td><hr><input id="phi-khac-edit" type="number" style="width:75%" value="0" onchange="tinhTongTien()" onkeyup="tinhTongTien()"/></td>
+                    </tr>
+                    <tr>
+                        <td><hr>Ghi chú: </td>
+                        <td><hr><input id="ghi-chu-edit" type="text" style="width:100%" maxlength="150"/></td>
+                    </tr>
+                    <tr>
+                        <td><hr>Tổng tiền: </td>
+                        <td><hr><input id="tong-tien-edit" type="number" style="width:75%" disabled /> VNĐ</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><hr><button id="luu-hoa-don" onclick="hoanTatHoaDon()" style="color:white;background-color:lightseagreen;border-color:lightseagreen">Lưu hóa đơn</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--DANH SÁCH HÓA ĐƠN-->
+    <div class="column right">
+        <h2 style="color:lightseagreen">Danh sách các hóa đơn</h2>
+        <hr />
+        <b style="color:blue">Danh sách các hóa đơn đang chờ</b>
+        
+        <div class="form-popup" id="myForm">
+            <form class="form-container">
+                <h3 style="text-align:center;">Bạn có chắc chắn muốn hủy hóa đơn này?</h3>
+                <input hidden id="ma-don-form-edit"/>
+                <hr>
+                <button type="button" class="btn cancel" onclick="closeForm()">Không hủy</button>
+                <button type="button" class="btn" onclick="ChapNhanHuy()">Hủy ngay</button>
+
+            </form>
+        </div>
+        <div class="ds-hoa-don" id="ds-hoa-don-id">
+            <table style="width: 100%; height:100%">
+                <tbody style="height:100%;">
+                    <!--DANH SACH CAC HOA DON CHUA LAM-->
+                    @foreach (var item in Model)
+                    {
+                        <!--1 hoa don-->
+                        <tr><td>Mã đơn: @item.MADON</td></tr>
+                        <tr class="1-hoa-don" style="height:100%;background-color:aliceblue;border: 1px solid gray; " >
+                            <td style="width: 75%;padding:10px;">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button onclick="openForm('@item.MADON')" style="background-color:rgb(255,128,128);border-color:rgb(255,128,128);">
+                                                    X
+                                                </button>
+                                                <b style="color:lightseagreen">Bàn @(item.BAN != "" ? item.BAN : "??") :</b>
+                                                <b style="color:lightseagreen">@item.GetTongTien() VNĐ</b>
+                                                
+                                            </td>
+                                        </tr>
+                                            @foreach (var ct in item.CT_DONGOIMON)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a> - @ct.SOLUONG</a>
+                                                        <a>x @ct.MATHANG.TENMATHANG</a>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            }
+                                        @if (@item.GHICHU!="")
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a>+ Ghi chú: <b>@item.GHICHU</b></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td style="width: 25%; height:100%;">
+                                <button style="width: 100%; height:100%;background-color:lightseagreen;border-color:lightseagreen;color:white" onclick="DoiTrangThaiXong('@item.MADON','1')">
+                                    Xong
+                                </button>
+                            </td>
+                        </tr>
+                        <tr><td><hr></td></tr>
+                    }
+                    <tr><td><b style="color:blue">Danh sách các hóa đơn gần đây</b></td></tr>
+                    <tr><td><p>-----------------</p></td></tr>
+                    <!--DANH SACH CAC HOA DON DA LAM-->
+                    @foreach (var item in Models.DonGoiMonModel.List3DonGoiMonDaLamGanNhat())
+                    {
+                        <!--1 hoa don-->
+                        <tr><td>Mã đơn: @item.MADON</td></tr> 
+                        <tr class="1-hoa-don" style="height:100%;background-color:#fcfcfc;border: 1px solid gray;">
+                            <td style="width: 75%;padding:10px;">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                
+                                                <b style="color:lightseagreen">Bàn @(item.BAN!=""?item.BAN:"??") :</b>
+                                                <b style="color:lightseagreen">@item.GetTongTien() VNĐ</b>
+                                            </td>
+                                        </tr>
+                                        @foreach (var ct in item.CT_DONGOIMON)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a> - @ct.SOLUONG</a>
+                                                    <a>x @ct.MATHANG.TENMATHANG</a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td style="width: 25%; height:100%;">
+                                <button style="width: 100%; height:100%;" onclick="" disabled >
+                                    Đã làm
+                                </button>
+                            </td>
+                        </tr>
+                        <tr><td><hr></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+
+        
+    </div>
+</div>
+
+<!--Vung-An hoa don-->
+<table style="text-align:center;width:100%;" hidden>
+    <tbody id="table-hoa-don">
+        <tr>
+            <td>aa ậ h ajhsj há a j</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>helo cac ban</td>
+            <td>10</td>
+            <td>1000</td>
+            <td>10000</td>
+        </tr>
+    </tbody>
+
+</table>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+function openForm(maDon) {
+    document.getElementById("myForm").style.display = "block";
+    document.getElementById("ds-hoa-don-id").style.display = "none";
+    $('#ma-don-form-edit').val(maDon).change();
+}
+function ChapNhanHuy(){
+    var MaDon=$('#ma-don-form-edit').val();
+    const url = '../../api/NVDonGoiMonApi?';
+    // The data we are going to send in our request
+    let params = {
+        //maNCC: $('#ma-ncc-edit').val(),
+        maDon: MaDon,
+    }
+
+    let query = Object.keys(params)
+             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+             .join('&');
+    // The parameters we are gonna pass to the fetch function
+    let fetchData = {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }
+
+    fetch(url + query, fetchData)
+    .then(function (res) {
+        // Handle response you get from the server
+        return res.json();
+    }).then(function (data) {
+        //alert(data);
+        location.reload();
+    });
+}
+function closeForm() {
+    document.getElementById("myForm").style.display = "none";
+    document.getElementById("ds-hoa-don-id").style.display = "block";
+}
+
+function DoiTrangThaiXong(MaDon,TrangThai){
+    const url = '../../api/NVDonGoiMonApi?';
+    // The data we are going to send in our request
+    let params = {
+        //maNCC: $('#ma-ncc-edit').val(),
+        maDon: MaDon,
+        trangThai:TrangThai,
+    }
+
+    let query = Object.keys(params)
+             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+             .join('&');
+    // The parameters we are gonna pass to the fetch function
+    let fetchData = {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }
+
+    fetch(url + query, fetchData)
+    .then(function (res) {
+        // Handle response you get from the server
+        return res.json();
+    }).then(function (data) {
+        //alert(data);
+        location.reload();
+    });
+}
+</script>
+<script>
+    function appendCT_DonGoiMon(maMon,tenMon,donGia) {
+        var txt1 = "<tr>" +
+                        "<td style=\"max-width: 120px;\"><a>- " + tenMon + " :</a><td>"+
+                        "<td>" +
+                            "<input id=\"hd-don-gia\" type=\"number\" value=\"" + donGia + "\" disabled "+"style=\"max-width:70px\""+">" +
+                            "<a>SL:</a>" +
+                            "<input id=\"hd-so-luong\" type=\"number\" value=\"1\" min=\"0\" style=\"width:40px\" onchange=\"tinhTongTien()\">" +
+                            "<a>phần.  </a>" +
+                            "<input id=\"ma-mon\" type=\"text\" value=\"" + maMon + "\" hidden>" +
+                            "<button onclick=\"deleteMonAn(this)\" style=\"color:white;background-color:rgb(255,128,128);border-color:rgb(255,128,128);\">Xóa</button>" +
+                        "</td>" +
+                    "<tr>";       // Create text with DOM
+        $("#table-ct-hoa-don").append(txt1);   // Append new elements
+        tinhTongTien();
+    }
+
+
+    function thayDoiTrangThaiMonAn(maMA,tt) {
+        const url = '../../api/NVMenuMonAnApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            maMonAn: maMA,
+            trangThai: tt,
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            //alert(data);
+            location.reload();
+        });
+    }
+
+    
+    function hoanTatHoaDon() {
+        //Goi API tao hoa don va lay ma hoa don
+        const url = '../../api/NVDonGoiMonApi?';
+        // The data we are going to send in our request
+        let params = {
+            ghiChu: $('#ghi-chu-edit').val(),
+            ban: $('#ban-edit').val(),
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then( function (madon) {
+            //alert(data);
+            if (madon != "") {
+                
+                addHoaDon(madon);
+                //alert("Da post "+madon);
+                InHoaDon(madon);
+            }
+            
+        });
+        //sau khi co ket qya goi add hoa don de no add CT hoa don
+        
+    }
+
+    //Nay no khong co bi loi dau dung sua :)))))))
+    async function addHoaDon(maDon) { 
+        var lMaMatHang="";
+        var lSoLuong="";
+        var lDonGia="";
+        await $('#table-ct-hoa-don').children().each( async function () {
+            //tbody
+            var j;
+            var stringPost="";
+            
+            //$(this).children().each(function () {
+                var $trElement = $(this);//tr
+                j = 0;
+                await $trElement.children().each( async function () {
+                    if (j != 0) {
+                        let $tdElement = $(this);
+                        let i = 0;
+                        let maMatHang;
+                        let soLuong;
+                        let donGia;
+                        await $tdElement.children('input').each( async function () {
+                            i++;
+                            if (i == 1) {
+                                donGia = $(this).val();
+                                //console.info($(this));
+                            }
+                            else if (i == 2) {
+                                soLuong = $(this).val();
+                               // console.info($(this));
+                            }
+                            else if (i == 3) {
+                                maMatHang = $(this).val();
+                                ///console.info($(this));
+                            }
+                        });
+                        //console.log(j);
+                        if (maMatHang != undefined) {
+                            lMaMatHang += '-'+ maMatHang;
+                            lSoLuong += '-' + soLuong;
+                            lDonGia+='-'+donGia;
+                            //addCTHoaDon(maDon, maMatHang, soLuong, donGia);
+                        }
+                            
+                    }
+                    j=1;
+                });
+            // });
+                
+                //
+        });
+        await addCTHoaDon(maDon, lMaMatHang, lSoLuong, lDonGia);
+        console.log(lMaMatHang+"|"+lSoLuong+"|"+lDonGia);
+        await sleep(500);
+        location.reload();
+    }
+    
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function addCTHoaDon(MaDon, MaMatHang, SoLuong, DonGia) {
+        console.log('chuan bi post'+MaDon+MaMatHang,+SoLuong);
+        //Goi API tao hoa don va lay ma hoa don
+        const url = '../../api/NVCTDonGoiMonApi?';
+        // The data we are going to send in our request
+        let params = {
+            maDon: MaDon,
+            maMatHang: MaMatHang,
+            soLuong: SoLuong,
+            donGia:DonGia,
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            //alert(data);
+            console.log('da post' + MaDon + MaMatHang, +SoLuong);
+        });
+    }
+    function deleteMonAn(ctl) {
+        $(ctl).parents("tr").remove();
+        tinhTongTien();
+    }
+    function tinhTongTien() {
+        var S = 0;
+        $('#table-ct-hoa-don').children().each(function () {
+            //tbody
+            var j;
+            var $trElement = $(this);//tr
+            j = 0;
+            $trElement.children().each(function () {
+                if (j != 0) {
+                    var $tdElement = $(this);
+                    var i = 0;
+                    var maMatHang;
+                    var soLuong;
+                    var donGia;
+                    $tdElement.children('input').each(function () {
+                        i++;
+                        if (i == 1) {
+                            donGia = $(this).val();
+                            //console.info($(this));
+                        }
+                        else if (i == 2) {
+                            soLuong = $(this).val();
+                            // console.info($(this));
+                        }
+                        else if (i == 3) {
+                            maMatHang = $(this).val();
+                            ///console.info($(this));
+                        }
+                    });
+                    //console.log(j);
+                    if (maMatHang != undefined) {
+                        S += soLuong * donGia;
+                    }
+                }
+                j = 1;
+
+            });
+            
+        });
+        //
+        S += $('#phi-khac-edit').val()*1;
+
+        $('#tong-tien-edit').val(S).change();
+    }
+</script>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Create three unequal columns that floats next to each other */
+    .column {
+        float: left;
+        padding: 10px;
+        height: 650px; /* Should be removed. Only for demonstration */
+        overflow-y: scroll;
+        background-color:#f0fff9;
+    }
+
+    .left  {
+        width: 50%;
+    }
+
+    .middle,.right {
+        width: 25%;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+
+</style>
+
+<!--Style cho form-->
+<style>
+    /* The popup form - hidden by default */
+    .form-popup {
+        display: none;
+        position: fixed;
+        top: 30%;
+        right: 5%;
+        border: 3px solid #f1f1f1;
+        z-index: 9;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+        max-width: 250px;
+        padding: 10px;
+        background-color: white;
+    }
+
+
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: red;
+            color: white;
+            padding: 10px 10px;
+            border: none;
+            cursor: pointer;
+            width: 45%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: lightgray;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+</style>
+
+<script>
+    
+    function InHoaDon(maDon){
+        var tong=$('#tong-tien-edit').val();
+        var phiKhac=$('#phi-khac-edit').val();
+        var ghiChu=$('#ghi-chu-edit').val();
+        var d = new Date();
+
+        var thoiGian = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
+    
+        var mywindow = window.open('', 'Print', 'height=600,width=800');
+
+        mywindow.document.write('<html><head><title>Print</title>');
+        mywindow.document.write('</head><body >');
+    
+        mywindow.document.write('<div style="text-align:center;width:100%;" id="print-area">');
+        mywindow.document.write('<h1>QUÁN CƠM BẦU BÍ</h1>');
+        mywindow.document.write('<a>24/47 đường 621, KP6, Linh Trung, Thủ Đức, TP.HCM</a>');
+        mywindow.document.write('<h3>HÓA ĐƠN MUA HÀNG</h3>');
+        mywindow.document.write('<p><b>Mã đơn: ');
+        mywindow.document.write(maDon);
+        mywindow.document.write('</b><a>.   Thời gian: ');
+        mywindow.document.write(thoiGian);
+        mywindow.document.write('</a></p><hr/>');
+    
+    
+        mywindow.document.write('<table style="text-align:center;width:50%; margin-left:25%">');
+        var content = document.getElementById('table-ct-hoa-don').innerHTML;
+        content=content.replace('<button onclick=\"deleteMonAn(this)\" style=\"color:white;background-color:rgb(255,128,128);border-color:rgb(255,128,128);\">Xóa</button>','');
+        content=content.replace('<button onclick=\"deleteMonAn(this)\" style=\"color:white;background-color:rgb(255,128,128);border-color:rgb(255,128,128);\">Xóa</button>','');
+        content=content.replace('<button onclick=\"deleteMonAn(this)\" style=\"color:white;background-color:rgb(255,128,128);border-color:rgb(255,128,128);\">Xóa</button>','');
+        content=content.replace('<button onclick=\"deleteMonAn(this)\" style=\"color:white;background-color:rgb(255,128,128);border-color:rgb(255,128,128);\">Xóa</button>','');
+        content=content.replace('<button onclick=\"deleteMonAn(this)\" style=\"color:white;background-color:rgb(255,128,128);border-color:rgb(255,128,128);\">Xóa</button>','');
+        content=content.replace('SL','........Số lượng ');
+        content=content.replace('SL','........Số lượng ');
+        content=content.replace('SL','........Số lượng ');
+        content=content.replace('SL','........Số lượng ');
+        content=content.replace('SL','........Số lượng ');
+
+
+        mywindow.document.write(content);
+        mywindow.document.write('</table>');
+        mywindow.document.write('<hr/>');
+    
+        mywindow.document.write('</div>');
+
+        mywindow.document.write('<div style="text-align:left; margin-left:25%"><a>Ghi chú: ');
+        mywindow.document.write(ghiChu);
+        mywindow.document.write(' </a></div>');
+
+        mywindow.document.write('<div style="text-align:right; margin-right:30%"><b>Phí khác: ');
+        mywindow.document.write(phiKhac);
+        mywindow.document.write(' VNĐ</b></div>');
+
+        mywindow.document.write('<div style="text-align:right; margin-right:30%"><b>Tổng: ');
+        mywindow.document.write(tong);
+        mywindow.document.write(' VNĐ</b></div>');
+   
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close();
+        mywindow.focus()
+        mywindow.print();
+        mywindow.close();
+        return true;
+        
+    }
+</script>

@@ -1,0 +1,156 @@
+﻿@model List<Models.Framework.MENUMONAN>
+
+@{
+    ViewBag.Title = "Index";
+
+    if (ViewBag.IsKhachHangDaDangNhap)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutChuaLogin.cshtml";
+    }
+
+}
+
+
+<div class="hero-wrap hero-bread" style="background-image: url(/Assets/khachhang/image/thit-kho-trung-cut.jpg);">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <h1 class="mb-0 bread" style="font-weight:799">Menu món ăn - nước giải khát</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section">
+    <div class="container">
+        <!--
+        <div class="row justify-content-center">
+            <div class="col-md-10 mb-5 text-center">
+                <ul class="product-category">
+                    <li><a href="#" class="active">Tất cả</a></li>
+                    
+                        <li><a href="#">Món ăn</a></li>
+                        <li><a href="#">Nước giải khát</a></li>
+                    
+                </ul>
+            </div>
+        </div>
+        -->
+        
+        <div class="row">
+            <!--Mot mat hang-->
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-3 ftco-animate">
+                    <div class="product">
+                        <a href="#" class="img-prod" style="text-align:center">
+                            <img class="img-fluid" src="@item.MONAN.HINHANH" alt="Colorlib Template" style="height:190px; align-self:center">
+
+                            <span class="status">@(item.TRANGTHAI.Value == true ? "" : "Tạm hết")</span>
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h3><a href="#">@item.MONAN.MATHANG.TENMATHANG</a></h3>
+                            <div class="d-flex">
+                                <div class="pricing">
+                                    <p class="price"><span class="price-sale">@item.MONAN.GIABAN VNĐ</span></p>
+                                </div>
+                            </div>
+                            <div class="bottom-area d-flex px-3">
+                                <div class="m-auto d-flex">
+                                    <a onclick="AddToCart('@item.MAMONAN','1')" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <span><i class="ion-ios-cart"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--Nuoc giai khat-->
+            @foreach (var item in Models.MenuNuocGiaiKhatModel.ListAllDangBan())
+            {
+                <div class="col-md-6 col-lg-3 ftco-animate">
+                    <div class="product">
+                        <a href="#" class="img-prod" style="text-align:center">
+                            <img class="img-fluid" src="@item.NUOCGIAIKHAT.HINHANH" alt="Colorlib Template" style="height:190px; align-self:center">
+
+                            <span class="status">@(item.NUOCGIAIKHAT.SOLUONGCON.Value > 0 ? "" : "Tạm hết")</span>
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h3><a href="#">@item.NUOCGIAIKHAT.MATHANG.TENMATHANG</a></h3>
+                            <div class="d-flex">
+                                <div class="pricing">
+                                    <p class="price"><span class="price-sale">@item.NUOCGIAIKHAT.GIABAN VNĐ</span></p>
+                                </div>
+                            </div>
+                            <div class="bottom-area d-flex px-3">
+                                <div class="m-auto d-flex">
+                                    <a onclick="AddToCart('@item.MANUOCGIAIKHAT','1')" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <span><i class="ion-ios-cart"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <!--
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        <li><a href="#">&lt;</a></li>
+                        <li class="active"><span>1</span></li>
+                        <li><a href="#">&gt;</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        -->
+    </div>
+</section>
+
+<script>
+    function AddToCart(maMH, SoLuong) {
+        if('@ViewBag.IsKhachHangDaDangNhap'!='True'){
+            location.href = '@Url.Action("Index","DangNhap")';
+            return;
+        }
+        const url = '../api/GioHangApi?';
+        // The data we are going to send in our request
+        let params = {
+            //maNCC: $('#ma-ncc-edit').val(),
+            maMatHang: maMH,
+            soLuong: SoLuong,
+        }
+
+        let query = Object.keys(params)
+                 .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                 .join('&');
+        // The parameters we are gonna pass to the fetch function
+        let fetchData = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }
+
+        fetch(url + query, fetchData)
+        .then(function (res) {
+            // Handle response you get from the server
+            return res.json();
+        }).then(function (data) {
+            alert(data);
+        });
+    }
+
+
+</script>
